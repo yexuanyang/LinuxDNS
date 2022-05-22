@@ -18,9 +18,30 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="dn2ip.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="generate_new_id.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Get_TLD.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="printmsg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Read_scheurl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="receiveDNS.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="show.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="mainHead.h">
+    <ClInclude Include="total.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
