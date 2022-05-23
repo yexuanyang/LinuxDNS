@@ -68,6 +68,7 @@ void receiveFromLocal()
 	dataLength = recvfrom(inDNS, buf, BUFSIZE, 0, (SOCKADDR *)&client,
 			      &length_client);
 	if (dataLength > -1) {
+		printf("\nreceive successfully!\n\n");
 		DNS_PACKET packet = receiveDNS(buf);
 		char url[DNameMaxLen];
 		Get_TLD(buf+12, url);
@@ -175,6 +176,7 @@ void receiveFromExtern()
 			      &length_client);
 
 	if (datalength > -1) {
+		printf("\nreceive form extern server successfully!\n\n");
 		if (level > 0) {
 			printf("外部DNS服务器IP：%s\n",
 			       inet_ntoa(extern_dns.sin_addr));
@@ -198,11 +200,20 @@ void receiveFromExtern()
 		DNIPList newNode;
 		DNS_PACKET packet = receiveDNS(buf);
 		Show_DNSPacket(packet,buf);
-		memcpy(newNode.dn, packet.AN->name, sizeof(newNode.dn));
-		newNode.expire_time = packet.AN->TTL;
-		memcpy(newNode.ip, packet.AN->Rdata, sizeof(unsigned int));
-		newNode.nextPtr = NULL;
-		addToExternDniplist(extern_dniplist, &newNode);
+		if (packet.AN->RRtype == 1) {
+			char name[DNameMaxLen];
+			unsigned short offset =
+				(((unsigned short)packet.AN->name[0]) << 8 |
+				 packet.AN->name[1]) &
+				0x3fff;
+			Get_TLD(buf + offset, name);
+			memcpy(newNode.dn, name, sizeof(newNode.dn));
+			newNode.expire_time = packet.AN->TTL;
+			memcpy(newNode.ip, packet.AN->Rdata, sizeof(unsigned int));
+			newNode.nextPtr = NULL;
+			addToExternDniplist(extern_dniplist, &newNode);
+		}
+		
 
 		client = trans_table[indexInTable].client;
 		datalength = sendto(inDNS, buf, datalength, 0,

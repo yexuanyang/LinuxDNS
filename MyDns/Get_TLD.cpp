@@ -9,7 +9,7 @@ void Get_TLD(char *buf, char *dest)
 {
 	int i = 0, j = 0,
 	    k = 0; //i是报文里的下标，j是计数是几，k是目标位置下标，
-	while (buf[i] != 0) {
+	while (buf[i] != 0 && !(dest[k -1] == '.' && dest[k - 2] == '.') ) {
 		if (buf[i] > 0 &&
 		    buf[i] <=
 			    63) //如果buf[i]为计数字节（例如3www5baidu3com中的3，5，3）
@@ -23,5 +23,9 @@ void Get_TLD(char *buf, char *dest)
 			k++;
 		}
 	}
-	dest[k] = '\0';
+	if (dest[k - 1] == '.' && dest[k - 2] == '.') {
+		dest[k - 2] = '\0'; 
+	} else {
+		dest[k] = '\0';
+	}
 }
