@@ -156,7 +156,7 @@ void receiveFromLocal()
 			nid = htons(nid);
 			if (nid == (unsigned short)-1 && level > 0) {
 				printf(" buffer full\t nid:%x\n",nid);
-				
+				exit(1);
 			} else {
 				memcpy(buf, &nid, sizeof(nid));
 				dataLength = sendto(outDNS, buf, dataLength, 0,
@@ -204,7 +204,8 @@ void receiveFromExtern()
 		unsigned short uid = ntohs(trans_table[indexInTable].last_ID);
 		
 		memcpy(buf, &uid, sizeof(unsigned short));
-		trans_count--;
+		if(trans_count > 0)
+			trans_count--;
 		if (level > 1) {
 			printf(" 转换表项数:%d \n", trans_count);
 		}
@@ -212,7 +213,7 @@ void receiveFromExtern()
 		DNIPList *newNode = (DNIPList*)malloc(sizeof(DNIPList));
 		DNS_PACKET packet = receiveDNS(buf);
 		Show_DNSPacket(packet,buf);
-		if (packet.AN->RRtype == 1) {
+		if (packet.AN && packet.AN->RRtype == 1) {
 			char name[DNameMaxLen];
 			unsigned short offset =
 				(((unsigned short)packet.AN->name[0]) << 8 |
