@@ -39,6 +39,7 @@ void Read_scheurl(DNIPList **local_dniplist,DNIPList **extern_dniplist)
 	memset((*local_dniplist)->ip, 0, sizeof((*local_dniplist)->ip)); 
 	(*local_dniplist)->expire_time = 0;
 	(*local_dniplist)->nextPtr = NULL; 
+	(*local_dniplist)->length = 1;//算入了头节点的长度
 	last = *local_dniplist;//让尾部指向现在的位置
 	while (!feof(fp) ){
 		fscanf_s(fp, "%s %s", ip, (unsigned)sizeof ip, url,
@@ -62,6 +63,7 @@ void Read_scheurl(DNIPList **local_dniplist,DNIPList **extern_dniplist)
 		temp->expire_time = INFINITE;
 		last->nextPtr = temp;
 		last = temp;//调整尾部
+		(*local_dniplist)->length++;
 	}
 	fclose(fp);
 	printf("%d data have been saved\n", count);
@@ -76,17 +78,18 @@ void Read_scheurl(DNIPList **local_dniplist,DNIPList **extern_dniplist)
 	memset((*extern_dniplist)->ip, 0, sizeof((*extern_dniplist)->ip)); 
 	(*extern_dniplist)->expire_time = 0;
 	(*extern_dniplist)->nextPtr = NULL; 
+	(*extern_dniplist)->length = 1;
 	last->nextPtr = *extern_dniplist;
 	return;
 }
 
 void print_team_msg(){
-	printf("***********************************************************\n");
-	printf("* @Course Name: Course Design of Computer Network         *\n");
-	printf("* @Name of Team members: Yang Yexuan, Yang Yuheng, Weng Yuechuan    *\n");
-	printf("* @Teacher: Jiang Yanjun         @Class number: 2020211301    *\n");
-	printf("* ------------------------------------------------------- *\n");
-	printf("*               DNS Relay Server - Ver 1.0                *\n");
-	printf("***********************************************************\n");
+	printf("*****************************************************************\n");
+	printf("* @Course Name: Course Design of Computer Network               *\n");
+	printf("* @Name of Team members: Yang Yexuan, Yang Yuheng, Weng Yuechuan*\n");
+	printf("* @Teacher: Jiang Yanjun         @Class number: 2020211301      *\n");
+	printf("* ------------------------------------------------------------- *\n");
+	printf("*               DNS Relay Server - Ver 1.0                      *\n");
+	printf("*****************************************************************\n");
 	printf("Command syntax : dnsrelay [-d | -dd] [dns-server-IP-addr]  \n");
 }

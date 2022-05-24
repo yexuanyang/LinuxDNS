@@ -9,7 +9,7 @@ sockaddr_in local_name, extern_name;
 sockaddr_in client, extern_dns;
 int length_client = sizeof sockaddr_in;
 char fileName[129] = "dest.txt";
-char DNSServerIp[16] = "192.168.1.1";
+char DNSServerIp[17] = "192.168.1.1";
 DNIPList **local_dniplist = (DNIPList **)malloc(sizeof(DNIPList *)),
 	 **extern_dniplist = (DNIPList **)malloc(sizeof(DNIPList *));
 
@@ -31,20 +31,20 @@ void getLevel(int argc, char *argv[])
 		}
 	}
 	if (setDNS) {
-		printf("set DNS server: %s\n", DNSServerIp);
+		printf(" set DNS server: %s\n", DNSServerIp);
 	}
 	if (setFile) {
-		printf("set file : %s\n", fileName);
+		printf(" set file : %s\n", fileName);
 	}
-	printf("Debug Level:%d\n", level);
+	printf(" Debug Level:%d\n", level);
 }
 
 void showBuffer(char *buf, int length)
 {
-	printf("获取到的包数据长度：%d\n获取的包数据：\n ", length);
+	printf(" 获取到的包数据长度：%d\n获取的包数据：\n ", length);
 	for (int i = 0; i < length; i++) {
 		printf("%02x ", (unsigned char)buf[i]);
-		if ((i + 1) % 20 == 0) {
+		if ((i + 1) % 40 == 0) {
 			printf("\n");
 		}
 	}
@@ -58,6 +58,7 @@ void addToExternDniplist(DNIPList **extern_dniplist, DNIPList *newNode)
 		current = current->nextPtr;
 	}
 	current->nextPtr = newNode;
+	(*extern_dniplist)->length++;
 }
 
 void receiveFromLocal()
@@ -68,15 +69,15 @@ void receiveFromLocal()
 	dataLength = recvfrom(inDNS, buf, BUFSIZE, 0, (SOCKADDR *)&client,
 			      &length_client);
 	if (dataLength > -1) {
-		printf("\nreceive successfully!\n\n");
+		printf("\n receive successfully!\n\n");
 		DNS_PACKET packet = receiveDNS(buf);
 		char url[DNameMaxLen];
-		Get_TLD(buf+12, url);
+		Get_TLD(buf, url,12);
 		if (level > 0) {
 			PrintTime();
-			printf("客户端IP：  %s:%u\n",
+			printf(" 客户端IP：  %s:%u\n",
 			       inet_ntoa(client.sin_addr), client.sin_port);
-			printf("询问的域名: %s\n", url);
+			printf(" 询问的域名: %s\n", url);
 			if (level > 1) {
 				showBuffer(buf, dataLength);
 				Show_DNSPacket(packet,buf);
@@ -93,7 +94,7 @@ void receiveFromLocal()
 			memcpy(sendBuf, buf, dataLength);
 			unsigned short _16bitflag = htons(0x8180);
 			unsigned short _16bitANcount;
-			memcpy(&sendBuf[2], &_16bitflag,
+			memcpy(sendBuf+2, &_16bitflag,
 			       sizeof(unsigned short));
 
 			if (strcmp(ip, "0.0.0.0") == 0) {
@@ -101,7 +102,7 @@ void receiveFromLocal()
 			} else {
 				_16bitANcount = htons(0x0001);
 			}
-			memcpy(&sendBuf[6], &_16bitANcount,
+			memcpy(sendBuf+ 6, &_16bitANcount,
 			       sizeof(unsigned short));
 
 			int curlen = 0;
@@ -135,34 +136,42 @@ void receiveFromLocal()
 					    length_client);
 
 			if (dataLength < 0) {
-				printf("发送包失败\n");
+				printf(" 发送包失败\n");
 			}
 
 			if (level > 0) {
-				printf("发送回应包： url:%s -> ip:%s\n", url,
+				printf(" 发送回应包： url:%s -> ip:%s\n", url,
 				       ip);
 			}
 
 		} else { //往外部DNS发
-			printf("url: %s 在本地DNS服务器不能解析，将发送至外部DNS\n",
+			printf(" url: %s 在本地DNS服务器不能解析，将发送至外部DNS\n",
 			       url);
 			unsigned short pid;
 			memcpy(&pid, buf, sizeof(unsigned short));
+			pid = ntohs(pid);
+
 			unsigned short nid =
 				generate_new_id(pid, client, 10, url);
-			if (nid == -1 && level > 0) {
-				printf("buffer full");
+			nid = htons(nid);
+			if (nid == (unsigned short)-1 && level > 0) {
+				printf(" buffer full\t nid:%x\n",nid);
+				
 			} else {
 				memcpy(buf, &nid, sizeof(nid));
 				dataLength = sendto(outDNS, buf, dataLength, 0,
 						    (SOCKADDR *)&extern_name,
 						    sizeof extern_name);
 				if (level > 0) {
-					printf("向外部DNS发送请求.  url: %s\n",
+					printf(" 向外部DNS发送请求.  url: %s\n",
 					       url);
 				}
 			}
 		}
+		free(packet.AN);
+		free(packet.AR);
+		free(packet.NS);
+		free(packet.questions);
 	}
 }
 
@@ -176,9 +185,9 @@ void receiveFromExtern()
 			      &length_client);
 
 	if (datalength > -1) {
-		printf("\nreceive form extern server successfully!\n\n");
+		printf("\n receive form extern server successfully!\n\n");
 		if (level > 0) {
-			printf("外部DNS服务器IP：%s\n",
+			printf(" 外部DNS服务器IP：%s\n",
 			       inet_ntoa(extern_dns.sin_addr));
 
 			PrintTime();
@@ -189,15 +198,18 @@ void receiveFromExtern()
 
 		unsigned short pid;
 		memcpy(&pid, buf, sizeof(unsigned short));
+		pid = ntohs(pid);
+
 		int indexInTable = pid;
-		memcpy(buf, &trans_table[indexInTable].last_ID,
-		       sizeof(unsigned short));
+		unsigned short uid = ntohs(trans_table[indexInTable].last_ID);
+		
+		memcpy(buf, &uid, sizeof(unsigned short));
 		trans_count--;
 		if (level > 1) {
-			printf("转换表项数:%d \n", trans_count);
+			printf(" 转换表项数:%d \n", trans_count);
 		}
 		trans_table[indexInTable].done = true;
-		DNIPList newNode;
+		DNIPList *newNode = (DNIPList*)malloc(sizeof(DNIPList));
 		DNS_PACKET packet = receiveDNS(buf);
 		Show_DNSPacket(packet,buf);
 		if (packet.AN->RRtype == 1) {
@@ -206,18 +218,25 @@ void receiveFromExtern()
 				(((unsigned short)packet.AN->name[0]) << 8 |
 				 packet.AN->name[1]) &
 				0x3fff;
-			Get_TLD(buf + offset, name);
-			memcpy(newNode.dn, name, sizeof(newNode.dn));
-			newNode.expire_time = packet.AN->TTL;
-			memcpy(newNode.ip, packet.AN->Rdata, sizeof(unsigned int));
-			newNode.nextPtr = NULL;
-			addToExternDniplist(extern_dniplist, &newNode);
+			Get_TLD(buf , name,offset);
+			memcpy(newNode->dn, name, sizeof(newNode->dn));
+			newNode->expire_time = packet.AN->TTL;
+			in_addr ip_addr;
+			ip_addr.S_un.S_addr = (unsigned)packet.AN->Rdata[0] << 24 |
+				      (unsigned)packet.AN->Rdata[1] << 16 & 0x00ff0000|
+				      (unsigned)packet.AN->Rdata[2] << 8 & 0x0000ff00|
+				      (unsigned)packet.AN->Rdata[3] & 0x000000ff;
+			memcpy(newNode->ip, inet_ntoa(ip_addr),sizeof(newNode->ip));
+			newNode->nextPtr = NULL;
+			addToExternDniplist(extern_dniplist, newNode);
 		}
-		
-
 		client = trans_table[indexInTable].client;
 		datalength = sendto(inDNS, buf, datalength, 0,
 				    (SOCKADDR *)&client, length_client);
+		free(packet.AN);
+		free(packet.AR);
+		free(packet.NS);
+		free(packet.questions);
 	}
 }
 
@@ -287,11 +306,12 @@ int main(int argc, char *argv[])
 
 	while (1) {
 		receiveFromLocal();
-		receiveFromExtern();
+ 		receiveFromExtern();
 	}
 
 	closesocket(inDNS);
 	closesocket(outDNS);
 	WSACleanup();
+
 	return 0;
 }

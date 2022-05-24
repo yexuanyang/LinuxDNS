@@ -41,13 +41,13 @@ typedef struct {
 
 //问题字段
 typedef struct {
-	char qname[129];      //查询名称
+	char qname[DNameMaxLen]; //查询名称
 	unsigned qtype : 16;  //查询类型
 	unsigned qclass : 16; //查询类
 } QUESTION;
 //
 typedef struct {
-	char name[129];        //域名
+	char name[DNameMaxLen]; //域名
 	unsigned RRtype : 16;  //类型
 	unsigned RRclass : 16; //类
 	unsigned TTL : 32;     //生存时间
@@ -65,16 +65,17 @@ typedef struct {
 
 typedef struct DNIPList { //这里进行更改
 	char ip[16]; //IP地址 进行了修改 ip地址的格式 xxx.xxx.xxx.xxx 16个字节应该可以使用
-	char dn[129];      //域名
+	char dn[DNameMaxLen]; //域名
 	int expire_time;   //过期时间
 	DNIPList *nextPtr; //指向下一结点的指针
+	int length;
 } DNIPList;                //标准：链表需要有不含值的头节点
 
 typedef struct {
 	unsigned short last_ID; /* The old id*/
 	BOOL done;          /*Mark whether the request was analysed completely*/
 	SOCKADDR_IN client; /*Requestor socket address*/
-	char url[129];      /*URL*/
+	char url[DNameMaxLen]; /*URL*/
 	int expire_time;    /*The time to die*/
 } ID_TRANS_CELL;
 
@@ -106,7 +107,7 @@ void Read_scheurl(DNIPList **local_dniplist, DNIPList **extern_dniplist);
 /// </summary>
 /// <param name="packet">传入的DNS报文</param>
 /// <param name="dest">保存解析后的域名字符串</param>
-void Get_TLD(char *buf, char *dest);
+void Get_TLD(char *buf, char *dest,unsigned long long offset);
 
 /// <summary>
 /// 获取DNS报文：返回DNS报文结构体
