@@ -143,7 +143,6 @@
     <ClCompile Include="generate_new_id.cpp" />
     <ClCompile Include="Get_TLD.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="printmsg.cpp" />
     <ClCompile Include="Read_scheurl.cpp" />
     <ClCompile Include="receiveDNS.cpp" />
     <ClCompile Include="show.cpp" />
