@@ -37,7 +37,7 @@ void Read_scheurl(DNIPList **local_dniplist,DNIPList **extern_dniplist)
 	}
 	memset((*local_dniplist)->dn, 0, sizeof((*local_dniplist)->dn));
 	memset((*local_dniplist)->ip, 0, sizeof((*local_dniplist)->ip)); 
-	(*local_dniplist)->expire_time = 0;
+	(*local_dniplist)->expire_time = -1;
 	(*local_dniplist)->nextPtr = NULL; 
 	(*local_dniplist)->length = 1;//算入了头节点的长度
 	last = *local_dniplist;//让尾部指向现在的位置
@@ -76,7 +76,7 @@ void Read_scheurl(DNIPList **local_dniplist,DNIPList **extern_dniplist)
 	*extern_dniplist = (DNIPList *)malloc(sizeof(DNIPList));
 	memset((*extern_dniplist)->dn, 0, sizeof((*extern_dniplist)->dn));
 	memset((*extern_dniplist)->ip, 0, sizeof((*extern_dniplist)->ip)); 
-	(*extern_dniplist)->expire_time = 0;
+	(*extern_dniplist)->expire_time = -1;
 	(*extern_dniplist)->nextPtr = NULL; 
 	(*extern_dniplist)->length = 1;
 	last->nextPtr = *extern_dniplist;

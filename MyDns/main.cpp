@@ -1,7 +1,7 @@
 #include "total.h"
 
 //全局变量定义
-int level = 0;                            //调试等级
+int level = 0;                            //debug level
 ID_TRANS_CELL trans_table[ID_TRANS_SIZE]; /*The ID_TRANS_TABLE*/
 int trans_count = 0;                      /*The cells of trans_table now*/
 SOCKET inDNS, outDNS;
@@ -53,11 +53,9 @@ void showBuffer(char *buf, int length)
 
 void addToExternDniplist(DNIPList **extern_dniplist, DNIPList *newNode)
 {
-	DNIPList *current = *extern_dniplist;
-	while (current->nextPtr) {
-		current = current->nextPtr;
-	}
-	current->nextPtr = newNode;
+	DNIPList *currentHead = ( * extern_dniplist)->nextPtr;
+	(*extern_dniplist)->nextPtr = newNode;
+	newNode->nextPtr = currentHead;
 	(*extern_dniplist)->length++;
 }
 
@@ -221,7 +219,9 @@ void receiveFromExtern()
 				0x3fff;
 			Get_TLD(buf , name,offset);
 			memcpy(newNode->dn, name, sizeof(newNode->dn));
-			newNode->expire_time = packet.AN->TTL;
+			time_t t;
+			time(&t);
+			newNode->expire_time = packet.AN->TTL + t;
 			in_addr ip_addr;
 			ip_addr.S_un.S_addr = (unsigned)packet.AN->Rdata[0] << 24 |
 				      (unsigned)packet.AN->Rdata[1] << 16 & 0x00ff0000|

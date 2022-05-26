@@ -63,7 +63,7 @@ typedef struct {
 	RR *AR;              //额外资源
 } DNS_PACKET;
 
-typedef struct DNIPList { //这里进行更改
+typedef struct DNIPList { 
 	char ip[16]; //IP地址 进行了修改 ip地址的格式 xxx.xxx.xxx.xxx 16个字节应该可以使用
 	char dn[DNameMaxLen]; //域名
 	int expire_time;   //过期时间
