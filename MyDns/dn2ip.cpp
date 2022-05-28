@@ -22,6 +22,18 @@ void LRU(DNIPList** head, DNIPList* destNode,DNIPList* destNodeAhead) {
 		destNode->nextPtr = curHead;
 		(*head)->nextPtr = destNode;
 	}
+	DNIPList *prinTemp = NULL;
+	prinTemp = (*head)->nextPtr; //指向下一项
+	if (level >= 2) {
+		printf("========= Cache ========\n");
+		for (int i = 0; prinTemp != NULL;
+		     prinTemp = prinTemp->nextPtr) {
+			printf("#%d Url:%s --> IP: %s\n", i, prinTemp->dn,
+			       prinTemp->ip);
+			i++;
+		}
+	}
+	printf("======================\n");
 }
 
 char *Ip_str(DNIPList **Local_DNIPList, DNIPList **Temp_DNIPList, char *url)

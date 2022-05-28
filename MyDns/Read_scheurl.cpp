@@ -79,5 +79,5 @@ void print_team_msg(){
 	printf("* ------------------------------------------------------------- *\n");
 	printf("*               DNS Relay Server - Ver 1.0                      *\n");
 	printf("*****************************************************************\n");
-	printf("Command syntax : MyDns [-d | -dd] [dns-server-IP-addr]  \n");
+	printf("Command syntax : MyDns [-d | -D] [dns-server-IP-addr]  \n");
 }
