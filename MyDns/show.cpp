@@ -3,9 +3,6 @@
 
 extern int level;
 
-/// <summary>
-/// 打印时间
-/// </summary>
 void PrintTime()
 {
 	char curTime[25];
@@ -20,11 +17,6 @@ void PrintTime()
 	return;
 }
 
-/// <summary>
-/// 输出DNS报文回答区段信息
-/// </summary>
-/// <param name="packet">要打印的DNS报文</param>
-/// <param name="level">调试等级</param>
 void PrintAnswer(DNS_PACKET packet,char *buf)
 {
 	//回答段：

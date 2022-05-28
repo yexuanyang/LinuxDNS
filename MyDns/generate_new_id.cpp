@@ -1,12 +1,4 @@
 #include "total.h"
-/// <summary>
-/// 
-/// </summary>
-/// <param name="id"></param>
-/// <param name="cli"></param>
-/// <param name="ttl"></param>
-/// <param name="url"></param>
-/// <returns></returns>
 
 extern int level;
 extern int trans_count;

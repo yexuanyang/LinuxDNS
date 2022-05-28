@@ -1,18 +1,6 @@
 #include"total.h"
-/// 
-/// </summary>
-/// <param name="local_dniplist"></param>
-/// <param name="net_dniplist"></param>
-///
-//typedef struct DNIPList{ //这里进行更改
-//char ip[16]; //IP地址 进行了修改 ip地址的格式 xxx.xxx.xxx.xxx 16个字节应该可以使用
-//char dn[65]; //域名
-//int expire_time;   //过期时间
-//DNIPList *nextPtr; //指向下一结点的指针
-//}
-//DNIPList; //标准：链表需要有不含值的头节点
 
-//全局变量定义
+
 extern int level;
 extern ID_TRANS_CELL trans_table[ID_TRANS_SIZE]; /*The ID_TRANS_TABLE*/
                      /*The cells of trans_table now*/

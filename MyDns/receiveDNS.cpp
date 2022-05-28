@@ -3,10 +3,7 @@
 
 extern struct sockaddr_in client;
 extern SOCKET inDNS;
-/// <summary>
-/// 获取DNS报文：不传参数，从客户端接受，返回DNS报文结构体
-/// </summary>
-/// <param name="buf">从客户端获取的字符数组的头指针的地址</param>
+
 DNS_PACKET receiveDNS(char *buf)
 {
 	DNS_PACKET packet;
@@ -173,11 +170,7 @@ DNS_PACKET receiveDNS(char *buf)
 	return packet;
 }
 
-/// <summary>
-/// 获得域名的字节长度
-/// </summary>
-/// <param name="p">存储域名的内存地址</param>
-/// <returns>域名长度</returns>
+
 int Get_TLDLength(char *p)
 {
 	int sum = 1, i = 0;

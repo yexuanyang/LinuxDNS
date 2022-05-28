@@ -1,6 +1,7 @@
 #include "total.h"
 extern int level;
 
+
 void LRU(DNIPList** head, DNIPList* destNode,DNIPList* destNodeAhead) {
 	time_t now;
 	time(&now);
