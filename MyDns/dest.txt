@@ -199,6 +199,7 @@
 0.0.0.0 zbszx.vicp.net
 0.0.0.0 zelnet.ru
 0.0.0.0 zhp.gdynia.pl
+0.0.0.0 wycblogger.com
 202.108.33.89 sina 
 61.135.181.175 sohu
 123.127.134.10 bupt

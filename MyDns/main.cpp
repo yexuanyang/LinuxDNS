@@ -308,6 +308,7 @@ int main(int argc, char *argv[])
 	while (1) {
 		receiveFromLocal();
  		receiveFromExtern();
+		DNIPList *prinTemp = NULL;
 	}
 
 	closesocket(inDNS);
