@@ -6,7 +6,7 @@ ID_TRANS_CELL trans_table[ID_TRANS_SIZE]; /*The ID_TRANS_TABLE*/
 int trans_count = 0;                      /*The cells of trans_table now*/
 #if _WIN64
 SOCKET inDNS, outDNS;
-int length_client = sizeof sockaddr_in;
+int length_client = sizeof (struct sockaddr_in);
 #elif __linux__
 int inDNS,outDNS;
 socklen_t length_client = sizeof(struct sockaddr);
