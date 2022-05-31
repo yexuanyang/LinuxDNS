@@ -16,7 +16,8 @@ void Read_scheurl(DNIPList **local_dniplist,DNIPList **extern_dniplist)
 	#if _WIN64
 	fopen_s(&fp,fileName, "r"); //ֻ����ʽ���ļ�
 	#elif __linux__
-	fp = fdopen(open(fileName,O_RDONLY),"r"); //ֻ����ʽ���ļ�
+	int fdint = open(fileName,O_RDONLY);
+	fp = fdopen(fdint,"r"); //ֻ����ʽ���ļ�
 	#endif
 	if (!fp) {
 		printf("Read scheduled URL failed.\n"); //��ȡ����

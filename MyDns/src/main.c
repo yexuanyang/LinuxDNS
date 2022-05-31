@@ -320,10 +320,10 @@ int main(int argc, char *argv[])
 		printf("ioctlsocket failed! error code:%d\n",
 		       WSAGetLastError()); //�ⲿ�׽��ַ�����
 	#elif __linux__
-	if(fcntl(inDNS,O_NONBLOCK)){
+	if(fcntl(inDNS,F_SETFL,O_NONBLOCK)){
 		printf("fcntl failed! error information:%s\n",strerror(errno));
 	}
-	if(fcntl(outDNS,O_NONBLOCK)){
+	if(fcntl(outDNS,F_SETFL,O_NONBLOCK)){
 		printf("fcntl failed! error information:%s\n",strerror(errno));
 	}
 	#endif
@@ -342,13 +342,16 @@ int main(int argc, char *argv[])
 		
 	//SOL_SOCKET���׽��ּ���������ѡ��
 	
-
-	if (bind(inDNS, (struct sockaddr *)&local_name, sizeof(struct sockaddr)) &&
-	    bind(outDNS, (struct sockaddr *)&extern_name, sizeof(struct sockaddr)) ) {
+	int in = bind(inDNS, (struct sockaddr *)&local_name, sizeof(struct sockaddr));
+	int out = bind(outDNS, (struct sockaddr *)&extern_name, sizeof(struct sockaddr));
+	if ( in && out) {
 		#if _WIN64
 		printf("ERROR! BIND FAILED! error code:%d\n",WSAGetLastError());
 		#elif __linux__
-		printf("ERROR! BIND FAILED! error information:%s\n",strerror(errno) );
+		if(in)
+		printf("ERROR! INDNS BIND FAILED! error information:%s\n",strerror(errno) );
+		if(out)
+		printf("ERROR! OUTDNS BIND FAILED! error information:%s\n",strerror(errno) );
 		#endif
 		exit(1);
 	}else {
