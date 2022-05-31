@@ -9,14 +9,14 @@ SOCKET inDNS, outDNS;
 int length_client = sizeof sockaddr_in;
 #elif __linux__
 int inDNS,outDNS;
-socklen_t length_client = sizeof(sockaddr);
+socklen_t length_client = sizeof(struct sockaddr);
 #endif
-sockaddr_in local_name, extern_name;
-sockaddr_in client, extern_dns;
+struct sockaddr_in local_name, extern_name;
+struct sockaddr_in client, extern_dns;
 char fileName[129] = "dest.txt";
 char DNSServerIp[17] = "192.168.1.1";
-DNIPList **local_dniplist = (DNIPList **)malloc(sizeof(DNIPList *)),
-	 **extern_dniplist = (DNIPList **)malloc(sizeof(DNIPList *));
+DNIPList **local_dniplist = NULL,
+	 **extern_dniplist = NULL;
 
 void getLevel(int argc, char *argv[])
 {
@@ -69,7 +69,7 @@ void receiveFromLocal()
 	char buf[BUFSIZE];
 	memset(buf, 0, BUFSIZE);
 	int dataLength = -1;
-	dataLength = recvfrom(inDNS, buf, BUFSIZE, 0, (sockaddr *)&client,
+	dataLength = recvfrom(inDNS, buf, BUFSIZE, 0, (struct sockaddr *)&client,
 			      &length_client);
 	if (dataLength > -1) {
 		printf("\n receive successfully!\n\n");
@@ -137,7 +137,7 @@ void receiveFromLocal()
 			memcpy(&sendBuf[12], answer, sizeof answer);
 
 			dataLength = sendto(inDNS, sendBuf, curlen + dataLength,
-					    0, (sockaddr *)&client,
+					    0, (struct sockaddr *)&client,
 					    length_client);
 
 			if (dataLength < 0) {
@@ -165,7 +165,7 @@ void receiveFromLocal()
 			} else {
 				memcpy(buf, &nid, sizeof(nid));
 				dataLength = sendto(outDNS, buf, dataLength, 0,
-						    (sockaddr *)&extern_name,
+						    (struct sockaddr *)&extern_name,
 						    sizeof extern_name);
 				if (level > 0) {
 					printf(" ���ⲿDNS��������.  url: %s\n",
@@ -186,7 +186,7 @@ void receiveFromExtern()
 	char url[DNameMaxLen];
 	memset(buf, 0, BUFSIZE);
 	int datalength = -1;
-	datalength = recvfrom(outDNS, buf, BUFSIZE, 0, (sockaddr *)&extern_dns,
+	datalength = recvfrom(outDNS, buf, BUFSIZE, 0, (struct sockaddr *)&extern_dns,
 			      &length_client);
 
 	if (datalength > -1) {
@@ -229,7 +229,7 @@ void receiveFromExtern()
 			time_t t;
 			time(&t);
 			newNode->expire_time = packet.AN->TTL + t;
-			in_addr ip_addr;
+			struct in_addr ip_addr;
 			#if _WIN64
 			ip_addr.S_un.S_addr = (unsigned)packet.AN->Rdata[0] << 24 |
 				      (unsigned)packet.AN->Rdata[1] << 16 & 0x00ff0000|
@@ -247,7 +247,7 @@ void receiveFromExtern()
 		}
 		client = trans_table[indexInTable].client;
 		datalength = sendto(inDNS, buf, datalength, 0,
-				    (sockaddr *)&client, length_client);
+				    (struct sockaddr *)&client, length_client);
 		free(packet.AN);
 		free(packet.AR);
 		free(packet.NS);
@@ -259,7 +259,8 @@ int main(int argc, char *argv[])
 {	
 	char buf[BUFSIZE];
 	char ip[16];
-
+	local_dniplist = (DNIPList**)malloc(sizeof(DNIPList*));
+	extern_dniplist = (DNIPList**)malloc(sizeof(DNIPList*));
 	print_team_msg();
 	getLevel(argc, argv);
 	#if _WIN64
@@ -307,7 +308,7 @@ int main(int argc, char *argv[])
 		trans_table[i].last_ID = 0;
 		trans_table[i].done = true;
 		trans_table[i].expire_time = 0;
-		memset(&(trans_table[i].client), 0, sizeof(sockaddr_in));
+		memset(&(trans_table[i].client), 0, sizeof(struct sockaddr_in));
 	}
 
 	int unblock = 1;
@@ -340,8 +341,8 @@ int main(int argc, char *argv[])
 	//SOL_SOCKET���׽��ּ���������ѡ��
 	
 
-	if (bind(inDNS, (sockaddr *)&local_name, sizeof(sockaddr)) &&
-	    bind(outDNS, (sockaddr *)&extern_name, sizeof(sockaddr)) ) {
+	if (bind(inDNS, (struct sockaddr *)&local_name, sizeof(struct sockaddr)) &&
+	    bind(outDNS, (struct sockaddr *)&extern_name, sizeof(struct sockaddr)) ) {
 		#if _win64
 		printf("ERROR! BIND FAILED! error code:%d\n",WSAGetLastError());
 		#elif __linux__

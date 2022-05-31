@@ -3,7 +3,7 @@
 extern int level;
 extern int trans_count;
 extern ID_TRANS_CELL trans_table[ID_TRANS_SIZE];
-unsigned short generate_new_id(unsigned short id, sockaddr_in cli, int ttl,
+unsigned short generate_new_id(unsigned short id, struct sockaddr_in cli, int ttl,
 			       char *url)
 {
 	/*

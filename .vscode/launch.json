@@ -8,7 +8,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/MyDns/main.out",
+            "program": "enter program name, for example ${workspaceFolder}/a.out",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
@@ -28,5 +28,6 @@
                 }
             ]
         }
+        
     ]
 }

@@ -1,0 +1,72 @@
+[
+{
+  "directory": "/home/yyx/Desktop/MyDns/build/bin",
+  "command": "/usr/bin/c89-gcc -Ddns_EXPORTS -I/home/yyx/MyDns/MyDns/src -g -fPIC -o CMakeFiles/dns.dir/dn2ip.c.o -c /home/yyx/Desktop/MyDns/MyDns/src/dn2ip.c",
+  "file": "/home/yyx/Desktop/MyDns/MyDns/src/dn2ip.c"
+},
+{
+  "directory": "/home/yyx/Desktop/MyDns/build/bin",
+  "command": "/usr/bin/c89-gcc -Ddns_EXPORTS -I/home/yyx/MyDns/MyDns/src -g -fPIC -o CMakeFiles/dns.dir/generate_new_id.c.o -c /home/yyx/Desktop/MyDns/MyDns/src/generate_new_id.c",
+  "file": "/home/yyx/Desktop/MyDns/MyDns/src/generate_new_id.c"
+},
+{
+  "directory": "/home/yyx/Desktop/MyDns/build/bin",
+  "command": "/usr/bin/c89-gcc -Ddns_EXPORTS -I/home/yyx/MyDns/MyDns/src -g -fPIC -o CMakeFiles/dns.dir/Get_TLD.c.o -c /home/yyx/Desktop/MyDns/MyDns/src/Get_TLD.c",
+  "file": "/home/yyx/Desktop/MyDns/MyDns/src/Get_TLD.c"
+},
+{
+  "directory": "/home/yyx/Desktop/MyDns/build/bin",
+  "command": "/usr/bin/c89-gcc -Ddns_EXPORTS -I/home/yyx/MyDns/MyDns/src -g -fPIC -o CMakeFiles/dns.dir/main.c.o -c /home/yyx/Desktop/MyDns/MyDns/src/main.c",
+  "file": "/home/yyx/Desktop/MyDns/MyDns/src/main.c"
+},
+{
+  "directory": "/home/yyx/Desktop/MyDns/build/bin",
+  "command": "/usr/bin/c89-gcc -Ddns_EXPORTS -I/home/yyx/MyDns/MyDns/src -g -fPIC -o CMakeFiles/dns.dir/Read_scheurl.c.o -c /home/yyx/Desktop/MyDns/MyDns/src/Read_scheurl.c",
+  "file": "/home/yyx/Desktop/MyDns/MyDns/src/Read_scheurl.c"
+},
+{
+  "directory": "/home/yyx/Desktop/MyDns/build/bin",
+  "command": "/usr/bin/c89-gcc -Ddns_EXPORTS -I/home/yyx/MyDns/MyDns/src -g -fPIC -o CMakeFiles/dns.dir/receiveDNS.c.o -c /home/yyx/Desktop/MyDns/MyDns/src/receiveDNS.c",
+  "file": "/home/yyx/Desktop/MyDns/MyDns/src/receiveDNS.c"
+},
+{
+  "directory": "/home/yyx/Desktop/MyDns/build/bin",
+  "command": "/usr/bin/c89-gcc -Ddns_EXPORTS -I/home/yyx/MyDns/MyDns/src -g -fPIC -o CMakeFiles/dns.dir/show.c.o -c /home/yyx/Desktop/MyDns/MyDns/src/show.c",
+  "file": "/home/yyx/Desktop/MyDns/MyDns/src/show.c"
+},
+{
+  "directory": "/home/yyx/Desktop/MyDns/build/bin",
+  "command": "/usr/bin/c89-gcc  -I/home/yyx/MyDns/MyDns/src -g -o CMakeFiles/MyDns.dir/dn2ip.c.o -c /home/yyx/Desktop/MyDns/MyDns/src/dn2ip.c",
+  "file": "/home/yyx/Desktop/MyDns/MyDns/src/dn2ip.c"
+},
+{
+  "directory": "/home/yyx/Desktop/MyDns/build/bin",
+  "command": "/usr/bin/c89-gcc  -I/home/yyx/MyDns/MyDns/src -g -o CMakeFiles/MyDns.dir/generate_new_id.c.o -c /home/yyx/Desktop/MyDns/MyDns/src/generate_new_id.c",
+  "file": "/home/yyx/Desktop/MyDns/MyDns/src/generate_new_id.c"
+},
+{
+  "directory": "/home/yyx/Desktop/MyDns/build/bin",
+  "command": "/usr/bin/c89-gcc  -I/home/yyx/MyDns/MyDns/src -g -o CMakeFiles/MyDns.dir/Get_TLD.c.o -c /home/yyx/Desktop/MyDns/MyDns/src/Get_TLD.c",
+  "file": "/home/yyx/Desktop/MyDns/MyDns/src/Get_TLD.c"
+},
+{
+  "directory": "/home/yyx/Desktop/MyDns/build/bin",
+  "command": "/usr/bin/c89-gcc  -I/home/yyx/MyDns/MyDns/src -g -o CMakeFiles/MyDns.dir/main.c.o -c /home/yyx/Desktop/MyDns/MyDns/src/main.c",
+  "file": "/home/yyx/Desktop/MyDns/MyDns/src/main.c"
+},
+{
+  "directory": "/home/yyx/Desktop/MyDns/build/bin",
+  "command": "/usr/bin/c89-gcc  -I/home/yyx/MyDns/MyDns/src -g -o CMakeFiles/MyDns.dir/Read_scheurl.c.o -c /home/yyx/Desktop/MyDns/MyDns/src/Read_scheurl.c",
+  "file": "/home/yyx/Desktop/MyDns/MyDns/src/Read_scheurl.c"
+},
+{
+  "directory": "/home/yyx/Desktop/MyDns/build/bin",
+  "command": "/usr/bin/c89-gcc  -I/home/yyx/MyDns/MyDns/src -g -o CMakeFiles/MyDns.dir/receiveDNS.c.o -c /home/yyx/Desktop/MyDns/MyDns/src/receiveDNS.c",
+  "file": "/home/yyx/Desktop/MyDns/MyDns/src/receiveDNS.c"
+},
+{
+  "directory": "/home/yyx/Desktop/MyDns/build/bin",
+  "command": "/usr/bin/c89-gcc  -I/home/yyx/MyDns/MyDns/src -g -o CMakeFiles/MyDns.dir/show.c.o -c /home/yyx/Desktop/MyDns/MyDns/src/show.c",
+  "file": "/home/yyx/Desktop/MyDns/MyDns/src/show.c"
+}
+]

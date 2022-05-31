@@ -1,0 +1,6 @@
+/home/yyx/Desktop/MyDns/build/CMakeFiles/edit_cache.dir
+/home/yyx/Desktop/MyDns/build/CMakeFiles/rebuild_cache.dir
+/home/yyx/Desktop/MyDns/build/bin/CMakeFiles/dns.dir
+/home/yyx/Desktop/MyDns/build/bin/CMakeFiles/MyDns.dir
+/home/yyx/Desktop/MyDns/build/bin/CMakeFiles/edit_cache.dir
+/home/yyx/Desktop/MyDns/build/bin/CMakeFiles/rebuild_cache.dir

@@ -33,11 +33,11 @@
 #elif __ANDROID__ // android
 
 #elif __linux__ // linux
+	#include<netinet/in.h>
 	#include<errno.h>
 	#include<sys/socket.h>
-	#include<fcntl.h>
 	#include<arpa/inet.h>
-	#include<netinet/in.h>
+	#include<fcntl.h>
 	#include<unistd.h>
 #elif __unix__ // all unices not caught above // Unix
 
@@ -49,9 +49,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <cstring>
 #include <time.h>
-#include <fstream>
 #include <stdbool.h>
 #include <math.h>
 
@@ -107,19 +105,21 @@ typedef struct DNS_PACKET {
 } DNS_PACKET;//dns packet
 
 
-typedef struct DNIPList { 
+struct DNIPList { 
 	char ip[16]; //IP address xxx.xxx.xxx.xxx
 	char dn[DNameMaxLen]; //name
 	int expire_time;   //exact expire_time
-	DNIPList *nextPtr; //pointer to next node
 	int length; //NodeList's length, only head node saves this value
-} DNIPList;//the list having head node, list stores temporary name-ip table
+	struct DNIPList *nextPtr; //pointer to next node
+};//the list having head node, list stores temporary name-ip table
+
+typedef struct DNIPList DNIPList;
 
 
 typedef struct ID_TRANS_CELL {
 	unsigned short last_ID; /* The old id*/
 	bool done;          /*Mark whether the request was analysed completely*/
-	sockaddr_in client; /*Requestor socket address*/
+	struct sockaddr_in client; /*Requestor socket address*/
 	char url[DNameMaxLen]; /*URL*/
 	int expire_time;    /*The time to die*/
 } ID_TRANS_CELL;//ID translate table, this table stores some initial information in dns message
@@ -183,7 +183,7 @@ int Get_TLDLength(char *p);
 /// <param name="ttl">time to live in this table</param>
 /// <param name="url">name</param>
 /// <returns>index in the table</returns>
-unsigned short generate_new_id(unsigned short id, sockaddr_in cli, int ttl,
+unsigned short generate_new_id(unsigned short id, struct sockaddr_in cli, int ttl,
 				char *url);
 
 /// <summary>
