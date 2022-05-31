@@ -18,6 +18,21 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\total.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\dn2ip.cpp" />
+    <ClCompile Include="src\generate_new_id.cpp" />
+    <ClCompile Include="src\Get_TLD.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Read_scheurl.cpp" />
+    <ClCompile Include="src\receiveDNS.cpp" />
+    <ClCompile Include="src\show.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\dest.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -142,21 +157,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="dn2ip.cpp" />
-    <ClCompile Include="generate_new_id.cpp" />
-    <ClCompile Include="Get_TLD.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Read_scheurl.cpp" />
-    <ClCompile Include="receiveDNS.cpp" />
-    <ClCompile Include="show.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="total.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="dest.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

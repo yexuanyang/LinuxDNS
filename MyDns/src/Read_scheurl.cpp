@@ -13,7 +13,7 @@ void Read_scheurl(DNIPList **local_dniplist,DNIPList **extern_dniplist)
 	
 	int count = 0;//���ڼ�¼�ж��ٸ��ڵ�
 	DNIPList *last;//ָ��β����ָ��
-	#if _win64
+	#if _WIN64
 	fopen_s(&fp,fileName, "r"); //ֻ����ʽ���ļ�
 	#elif __linux__
 	fp = fdopen(open(fileName,O_RDONLY),"r"); //ֻ����ʽ���ļ�
@@ -35,8 +35,7 @@ void Read_scheurl(DNIPList **local_dniplist,DNIPList **extern_dniplist)
 	(*local_dniplist)->length = 1;//������ͷ�ڵ�ĳ���
 	last = *local_dniplist;//��β��ָ�����ڵ�λ��
 	while (!feof(fp) ){
-		fscanf(fp, "%s %s", ip, (unsigned)sizeof ip, url,
-			 (unsigned)sizeof url);
+		fscanf(fp, "%s %s", ip, url);
 		count++;
 		DNIPList *temp = (DNIPList *)malloc(sizeof(DNIPList));//�½ڵ�
 		if (!temp) {//�����ڴ�ʧ��

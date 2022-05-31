@@ -279,7 +279,7 @@ int main(int argc, char *argv[])
 	}
 		
 	if(outDNS < 0){
-		#if _win64
+		#if _WIN64
 		printf("create socket failed! error code:%d",
 		       WSAGetLastError());
 		#elif __linux__
@@ -311,7 +311,7 @@ int main(int argc, char *argv[])
 	}
 
 	int unblock = 1;
-	#if _win64
+	#if _WIN64
 	if(ioctlsocket(inDNS, FIONBIO, (u_long FAR *)&unblock))
 		printf("ioctlsocket failed! error code:%d\n",WSAGetLastError()); //�����׽��ַ�����
 	
@@ -330,7 +330,7 @@ int main(int argc, char *argv[])
 	if(setsockopt(
 		inDNS, SOL_SOCKET, SO_REUSEADDR, (const char *)&reuse,
 		sizeof(reuse))){
-			#if _win64
+			#if _WIN64
 			printf("setsockopt failed! error code:%d\n",WSAGetLastError()); //SO_REUSEADDR������ͬһ�˿�������ͬһ�������Ķ��ʵ��	
 			#elif __linux__
 			printf("setsockopt failed! error information:%s\n",strerror(errno)); //SO_REUSEADDR������ͬһ�˿�������ͬһ�������Ķ��ʵ��	
@@ -342,7 +342,7 @@ int main(int argc, char *argv[])
 
 	if (bind(inDNS, (sockaddr *)&local_name, sizeof(sockaddr)) &&
 	    bind(outDNS, (sockaddr *)&extern_name, sizeof(sockaddr)) ) {
-		#if _win64
+		#if _WIN64
 		printf("ERROR! BIND FAILED! error code:%d\n",WSAGetLastError());
 		#elif __linux__
 		printf("ERROR! BIND FAILED! error information:%s\n",strerror(errno) );
@@ -358,7 +358,7 @@ int main(int argc, char *argv[])
 		DNIPList *prinTemp = NULL;
 	}
 
-	#if _win64
+	#if _WIN64
 	closesocket(inDNS);
 	closesocket(outDNS);
 	WSACleanup();
