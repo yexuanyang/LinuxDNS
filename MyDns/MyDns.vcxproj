@@ -19,19 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\total.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\dn2ip.cpp" />
-    <ClCompile Include="src\generate_new_id.cpp" />
-    <ClCompile Include="src\Get_TLD.cpp" />
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Read_scheurl.cpp" />
-    <ClCompile Include="src\receiveDNS.cpp" />
-    <ClCompile Include="src\show.cpp" />
+    <ClCompile Include="src\dn2ip.c" />
+    <ClCompile Include="src\generate_new_id.c" />
+    <ClCompile Include="src\Get_TLD.c" />
+    <ClCompile Include="src\main.c" />
+    <ClCompile Include="src\Read_scheurl.c" />
+    <ClCompile Include="src\receiveDNS.c" />
+    <ClCompile Include="src\show.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\dest.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\total.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

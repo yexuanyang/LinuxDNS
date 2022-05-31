@@ -15,30 +15,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\total.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\dn2ip.cpp">
+    <ClCompile Include="src\dn2ip.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\generate_new_id.cpp">
+    <ClCompile Include="src\generate_new_id.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\Get_TLD.cpp">
+    <ClCompile Include="src\Get_TLD.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\main.cpp">
+    <ClCompile Include="src\main.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\Read_scheurl.cpp">
+    <ClCompile Include="src\Read_scheurl.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\receiveDNS.cpp">
+    <ClCompile Include="src\receiveDNS.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\show.cpp">
+    <ClCompile Include="src\show.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -46,5 +41,10 @@
     <Text Include="src\dest.txt">
       <Filter>资源文件</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\total.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
