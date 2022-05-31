@@ -1,13 +1,18 @@
 #include "total.h"
 
-//È«¾Ö±äÁ¿¶¨Òå
+//È«ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 int level = 0;                            //debug level
 ID_TRANS_CELL trans_table[ID_TRANS_SIZE]; /*The ID_TRANS_TABLE*/
 int trans_count = 0;                      /*The cells of trans_table now*/
+#if _WIN64
 SOCKET inDNS, outDNS;
+int length_client = sizeof sockaddr_in;
+#elif __linux__
+int inDNS,outDNS;
+socklen_t length_client = sizeof(sockaddr);
+#endif
 sockaddr_in local_name, extern_name;
 sockaddr_in client, extern_dns;
-int length_client = sizeof sockaddr_in;
 char fileName[129] = "dest.txt";
 char DNSServerIp[17] = "192.168.1.1";
 DNIPList **local_dniplist = (DNIPList **)malloc(sizeof(DNIPList *)),
@@ -15,7 +20,7 @@ DNIPList **local_dniplist = (DNIPList **)malloc(sizeof(DNIPList *)),
 
 void getLevel(int argc, char *argv[])
 {
-	BOOL setDNS = false, setFile = false;
+	bool setDNS = false, setFile = false;
 	if (argc > 1 && argv[1][0] == '-') {
 		if (argv[1][1] == 'd')
 			level = 1;
@@ -23,11 +28,11 @@ void getLevel(int argc, char *argv[])
 			level = 2;
 		if (argc > 2) {
 			setDNS = true;
-			strcpy_s(DNSServerIp, sizeof DNSServerIp, argv[2]);
+			memcpy(DNSServerIp, argv[2], sizeof DNSServerIp);
 		}
 		if (argc > 3) {
 			setFile = true;
-			strcpy_s(fileName, sizeof fileName, argv[3]);
+			memcpy(fileName, argv[3], sizeof fileName);
 		}
 	}
 	if (setDNS) {
@@ -41,7 +46,7 @@ void getLevel(int argc, char *argv[])
 
 void showBuffer(char *buf, int length)
 {
-	printf(" »ñÈ¡µ½µÄ°üÊý¾Ý³¤¶È£º%d\n»ñÈ¡µÄ°üÊý¾Ý£º\n ", length);
+	printf(" ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ä°ï¿½ï¿½ï¿½ï¿½Ý³ï¿½ï¿½È£ï¿½%d\nï¿½ï¿½È¡ï¿½Ä°ï¿½ï¿½ï¿½ï¿½Ý£ï¿½\n ", length);
 	for (int i = 0; i < length; i++) {
 		printf("%02x ", (unsigned char)buf[i]);
 		if ((i + 1) % 40 == 0) {
@@ -64,7 +69,7 @@ void receiveFromLocal()
 	char buf[BUFSIZE];
 	memset(buf, 0, BUFSIZE);
 	int dataLength = -1;
-	dataLength = recvfrom(inDNS, buf, BUFSIZE, 0, (SOCKADDR *)&client,
+	dataLength = recvfrom(inDNS, buf, BUFSIZE, 0, (sockaddr *)&client,
 			      &length_client);
 	if (dataLength > -1) {
 		printf("\n receive successfully!\n\n");
@@ -73,16 +78,18 @@ void receiveFromLocal()
 		Get_TLD(buf, url,12);
 		if (level > 0) {
 			PrintTime();
-			printf(" ¿Í»§¶ËIP£º  %s:%u\n",
+			
+			printf(" ï¿½Í»ï¿½ï¿½ï¿½IPï¿½ï¿½  %s:%u\n",
 			       inet_ntoa(client.sin_addr), client.sin_port);
-			printf(" Ñ¯ÎÊµÄÓòÃû: %s\n", url);
+				
+			printf(" Ñ¯ï¿½Êµï¿½ï¿½ï¿½ï¿½ï¿½: %s\n", url);
 			if (level > 1) {
 				showBuffer(buf, dataLength);
 				Show_DNSPacket(packet,buf);
 			}
 		}
 		char *ip = Ip_str(local_dniplist, extern_dniplist, url);
-		//ÔÚ±¾µØ»òÕßÍøÂç»º´æ±íÕÒµ½
+		//ï¿½Ú±ï¿½ï¿½Ø»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ç»ºï¿½ï¿½ï¿½ï¿½Òµï¿½
 		if (strcmp(ip ,"failed") != 0) {
 			if (level > 0) {
 				PrintTime();
@@ -130,20 +137,20 @@ void receiveFromLocal()
 			memcpy(&sendBuf[12], answer, sizeof answer);
 
 			dataLength = sendto(inDNS, sendBuf, curlen + dataLength,
-					    0, (SOCKADDR *)&client,
+					    0, (sockaddr *)&client,
 					    length_client);
 
 			if (dataLength < 0) {
-				printf(" ·¢ËÍ°üÊ§°Ü\n");
+				printf(" ï¿½ï¿½ï¿½Í°ï¿½Ê§ï¿½ï¿½\n");
 			}
 
 			if (level > 0) {
-				printf(" ·¢ËÍ»ØÓ¦°ü£º url:%s -> ip:%s\n", url,
+				printf(" ï¿½ï¿½ï¿½Í»ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ url:%s -> ip:%s\n", url,
 				       ip);
 			}
 
-		} else { //ÍùÍâ²¿DNS·¢
-			printf(" url: %s ÔÚ±¾µØDNS·þÎñÆ÷²»ÄÜ½âÎö£¬½«·¢ËÍÖÁÍâ²¿DNS\n",
+		} else { //ï¿½ï¿½ï¿½â²¿DNSï¿½ï¿½
+			printf(" url: %s ï¿½Ú±ï¿½ï¿½ï¿½DNSï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½â²¿DNS\n",
 			       url);
 			unsigned short pid;
 			memcpy(&pid, buf, sizeof(unsigned short));
@@ -158,10 +165,10 @@ void receiveFromLocal()
 			} else {
 				memcpy(buf, &nid, sizeof(nid));
 				dataLength = sendto(outDNS, buf, dataLength, 0,
-						    (SOCKADDR *)&extern_name,
+						    (sockaddr *)&extern_name,
 						    sizeof extern_name);
 				if (level > 0) {
-					printf(" ÏòÍâ²¿DNS·¢ËÍÇëÇó.  url: %s\n",
+					printf(" ï¿½ï¿½ï¿½â²¿DNSï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.  url: %s\n",
 					       url);
 				}
 			}
@@ -179,13 +186,13 @@ void receiveFromExtern()
 	char url[DNameMaxLen];
 	memset(buf, 0, BUFSIZE);
 	int datalength = -1;
-	datalength = recvfrom(outDNS, buf, BUFSIZE, 0, (SOCKADDR *)&extern_dns,
+	datalength = recvfrom(outDNS, buf, BUFSIZE, 0, (sockaddr *)&extern_dns,
 			      &length_client);
 
 	if (datalength > -1) {
 		printf("\n receive form extern server successfully!\n\n");
 		if (level > 0) {
-			printf(" Íâ²¿DNS·þÎñÆ÷IP£º%s\n",
+			printf(" ï¿½â²¿DNSï¿½ï¿½ï¿½ï¿½ï¿½ï¿½IPï¿½ï¿½%s\n",
 			       inet_ntoa(extern_dns.sin_addr));
 
 			PrintTime();
@@ -205,7 +212,7 @@ void receiveFromExtern()
 		if(trans_count > 0)
 			trans_count--;
 		if (level > 1) {
-			printf(" ×ª»»±íÏîÊý:%d \n", trans_count);
+			printf(" ×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:%d \n", trans_count);
 		}
 		trans_table[indexInTable].done = true;
 		DNIPList *newNode = (DNIPList*)malloc(sizeof(DNIPList));
@@ -223,17 +230,24 @@ void receiveFromExtern()
 			time(&t);
 			newNode->expire_time = packet.AN->TTL + t;
 			in_addr ip_addr;
+			#if _WIN64
 			ip_addr.S_un.S_addr = (unsigned)packet.AN->Rdata[0] << 24 |
 				      (unsigned)packet.AN->Rdata[1] << 16 & 0x00ff0000|
 				      (unsigned)packet.AN->Rdata[2] << 8 & 0x0000ff00|
 				      (unsigned)packet.AN->Rdata[3] & 0x000000ff;
+			#elif __linux__
+			ip_addr.s_addr = (unsigned)packet.AN->Rdata[0] << 24 |
+				      (unsigned)packet.AN->Rdata[1] << 16 & 0x00ff0000|
+				      (unsigned)packet.AN->Rdata[2] << 8 & 0x0000ff00|
+				      (unsigned)packet.AN->Rdata[3] & 0x000000ff;
+			#endif
 			memcpy(newNode->ip, inet_ntoa(ip_addr),sizeof(newNode->ip));
 			newNode->nextPtr = NULL;
 			addToExternDniplist(extern_dniplist, newNode);
 		}
 		client = trans_table[indexInTable].client;
 		datalength = sendto(inDNS, buf, datalength, 0,
-				    (SOCKADDR *)&client, length_client);
+				    (sockaddr *)&client, length_client);
 		free(packet.AN);
 		free(packet.AR);
 		free(packet.NS);
@@ -248,18 +262,32 @@ int main(int argc, char *argv[])
 
 	print_team_msg();
 	getLevel(argc, argv);
-
+	#if _WIN64
 	WSADATA wsadata;
 	if (WSAStartup(MAKEWORD(2, 2), &wsadata))
 		return 0;
+	#endif
 
 	inDNS = socket(AF_INET, SOCK_DGRAM, 0);
 	outDNS = socket(AF_INET, SOCK_DGRAM, 0);
-	if (inDNS < 0)
+	if (inDNS < 0){
+		#if _WIN64
 		printf("create socket failed! error code:%d",WSAGetLastError());
-	if(outDNS < 0)
+		#elif __linux__
+		printf("create socket failed! error information:%s\n",strerror(errno));
+		#endif
+	}
+		
+	if(outDNS < 0){
+		#if _win64
 		printf("create socket failed! error code:%d",
 		       WSAGetLastError());
+		#elif __linux__
+		printf("create socket failed! error information:%s\n",
+				strerror(errno));
+		#endif
+	}
+		
 	
 
 	Read_scheurl(local_dniplist, extern_dniplist);
@@ -277,29 +305,48 @@ int main(int argc, char *argv[])
 
 	for (int i = 0; i < ID_TRANS_SIZE; i++) {
 		trans_table[i].last_ID = 0;
-		trans_table[i].done = TRUE;
+		trans_table[i].done = true;
 		trans_table[i].expire_time = 0;
-		memset(&(trans_table[i].client), 0, sizeof(SOCKADDR_IN));
+		memset(&(trans_table[i].client), 0, sizeof(sockaddr_in));
 	}
 
 	int unblock = 1;
+	#if _win64
 	if(ioctlsocket(inDNS, FIONBIO, (u_long FAR *)&unblock))
-		printf("ioctlsocket failed! error code:%d\n",WSAGetLastError()); //±¾µØÌ×½Ó×Ö·Ç×èÈû
+		printf("ioctlsocket failed! error code:%d\n",WSAGetLastError()); //ï¿½ï¿½ï¿½ï¿½ï¿½×½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½
 	
 	if(ioctlsocket(outDNS, FIONBIO, (u_long FAR *)&unblock))
 		printf("ioctlsocket failed! error code:%d\n",
-		       WSAGetLastError()); //Íâ²¿Ì×½Ó×Ö·Ç×èÈû
+		       WSAGetLastError()); //ï¿½â²¿ï¿½×½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½
+	#elif __linux__
+	if(fcntl(inDNS,O_NONBLOCK)){
+		printf("fcntl failed! error information:%s\n",strerror(errno));
+	}
+	if(fcntl(outDNS,O_NONBLOCK)){
+		printf("fcntl failed! error information:%s\n",strerror(errno));
+	}
+	#endif
 	int reuse = 1;
 	if(setsockopt(
 		inDNS, SOL_SOCKET, SO_REUSEADDR, (const char *)&reuse,
-		sizeof(reuse)))
-		printf("setsockopt failed! error code:%d\n",WSAGetLastError()); //SO_REUSEADDRÔÊÐíÔÚÍ¬Ò»¶Ë¿ÚÉÏÆô¶¯Í¬Ò»·þÎñÆ÷µÄ¶à¸öÊµÀý
-	//SOL_SOCKETÔÚÌ×½Ó×Ö¼¶±ðÉÏÉèÖÃÑ¡Ïî
+		sizeof(reuse))){
+			#if _win64
+			printf("setsockopt failed! error code:%d\n",WSAGetLastError()); //SO_REUSEADDRï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬Ò»ï¿½Ë¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¶ï¿½ï¿½Êµï¿½ï¿½	
+			#elif __linux__
+			printf("setsockopt failed! error information:%s\n",strerror(errno)); //SO_REUSEADDRï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬Ò»ï¿½Ë¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¶ï¿½ï¿½Êµï¿½ï¿½	
+			#endif	
+		}
+		
+	//SOL_SOCKETï¿½ï¿½ï¿½×½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½
 	
 
-	if (bind(inDNS, (SOCKADDR *)&local_name, sizeof(SOCKADDR)) &&
-	    bind(outDNS, (SOCKADDR *)&extern_name, sizeof(SOCKADDR)) ) {
+	if (bind(inDNS, (sockaddr *)&local_name, sizeof(sockaddr)) &&
+	    bind(outDNS, (sockaddr *)&extern_name, sizeof(sockaddr)) ) {
+		#if _win64
 		printf("ERROR! BIND FAILED! error code:%d\n",WSAGetLastError());
+		#elif __linux__
+		printf("ERROR! BIND FAILED! error information:%s\n",strerror(errno) );
+		#endif
 		exit(1);
 	}else {
 		printf("BIND SUCCESSFULLY!\n");
@@ -311,9 +358,14 @@ int main(int argc, char *argv[])
 		DNIPList *prinTemp = NULL;
 	}
 
+	#if _win64
 	closesocket(inDNS);
 	closesocket(outDNS);
 	WSACleanup();
+	#elif __linux
+	close(inDNS);
+	close(outDNS);
+	#endif
 
 	return 0;
 }

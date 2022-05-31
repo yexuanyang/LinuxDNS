@@ -10,19 +10,23 @@ void PrintTime()
 	time(&t);
 	struct tm defaultTm = {0, 0, 0, 1, 1, 0, 0, 0, 0};
 	struct tm *time = &defaultTm;
+	#if _win64
 	localtime_s(time, &t);
+	#elif __linux__
+	time = localtime(&t);
+	#endif
 	strftime(curTime, sizeof(curTime), "%c",
 		 time);
-	printf("Ê±¼ä£º%s\n", curTime);
+	printf("Ê±ï¿½ä£º%s\n", curTime);
 	return;
 }
 
 void PrintAnswer(DNS_PACKET packet,char *buf)
 {
-	//»Ø´ð¶Î£º
+	//ï¿½Ø´ï¿½Î£ï¿½
 	for (unsigned j = 0; j < packet.header.ancount; j++) {
 		unsigned short offset = ( ((unsigned short)packet.AN[j].name[0]) << 8 | (unsigned char)packet.AN[j].name[1] ) & 0x3fff;
-		printf("<==========»Ø´ðÇø¶Î==========>\n\n");
+		printf("<==========ï¿½Ø´ï¿½ï¿½ï¿½ï¿½ï¿½==========>\n\n");
 		char url[DNameMaxLen];
 		Get_TLD(buf, url,offset);
 		printf("Name: %s \t", url);
@@ -50,20 +54,20 @@ void PrintAnswer(DNS_PACKET packet,char *buf)
 	}
 	
 	if (level == 2) {
-		//ÊÚÈ¨¶Î£º
+		//ï¿½ï¿½È¨ï¿½Î£ï¿½
 		
 		for (unsigned i = 0; i < packet.header.nscount; i++) {
-			printf("<==========ÊÚÈ¨Çø¶Î==========>\n\n");
+			printf("<==========ï¿½ï¿½È¨ï¿½ï¿½ï¿½ï¿½==========>\n\n");
 			printf("Name: %s \t", packet.NS[i].name);
 			PrintTime();
 			printf("Type: %u \tClass: %u\t TTL: %u\t DataLen: %u\n",
 			       packet.NS[i].RRtype, packet.NS[i].RRclass,
 			       packet.NS[i].TTL, packet.NS[i].dataLen);
 		}
-		//¶îÍâ×ÊÔ´¶Î£º
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½Î£ï¿½
 		
 		for (unsigned i = 0; i < packet.header.arcount; i++) {
-			printf("<==========¶îÍâ×ÊÔ´Çø¶Î==========>\n\n");
+			printf("<==========ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½==========>\n\n");
 			printf("Name: %s \t", packet.AR[i].name);
 			PrintTime();
 			printf("Type: %u \tClass: %u\t TTL: %u\t DataLen: %u\n",
@@ -78,7 +82,7 @@ void Show_DNSPacket(DNS_PACKET packet,char *buf)
 {
 	if (level == 2) {
 		printf("\n ID: %u \n QR: %x \n OPCODE: %x \n AA: %x \n TC: %x \n RD: %x \n RA: %x \n zero: %x \n rcode: %x \n\
- ÎÊÌâÊý: %u \n ×ÊÔ´¼ÇÂ¼Êý: %u \n ÊÚÈ¨×ÊÔ´¼ÇÂ¼Êý: %u \n ¶îÍâ×ÊÔ´¼ÇÂ¼Êý: %u \n",
+ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: %u \n ï¿½ï¿½Ô´ï¿½ï¿½Â¼ï¿½ï¿½: %u \n ï¿½ï¿½È¨ï¿½ï¿½Ô´ï¿½ï¿½Â¼ï¿½ï¿½: %u \n ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½Â¼ï¿½ï¿½: %u \n",
 		       packet.header.id, packet.header.qr, packet.header.opcode,
 		       packet.header.aa, packet.header.tc, packet.header.rd,
 		       packet.header.ra, packet.header.z, packet.header.rcode,

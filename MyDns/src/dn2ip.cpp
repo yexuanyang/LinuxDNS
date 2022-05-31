@@ -23,7 +23,7 @@ void LRU(DNIPList** head, DNIPList* destNode,DNIPList* destNodeAhead) {
 		(*head)->nextPtr = destNode;
 	}
 	DNIPList *prinTemp = NULL;
-	prinTemp = (*head)->nextPtr; //Ö¸ÏòÏÂÒ»Ïî
+	prinTemp = (*head)->nextPtr; //Ö¸ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
 	if (level >= 2) {
 		printf("========= Cache ========\n");
 		for (int i = 0; prinTemp != NULL;
@@ -42,7 +42,7 @@ char *Ip_str(DNIPList **Local_DNIPList, DNIPList **Temp_DNIPList, char *url)
 	time_t now;
 	time(&now);
 	if (!ip_str) {
-		printf(" \n\nÉêÇëÄÚ´æÊ§°Ü\n");
+		printf(" \n\nï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½Ê§ï¿½ï¿½\n");
 		exit(1);
 	}
 	char *destName = url;
@@ -54,20 +54,28 @@ char *Ip_str(DNIPList **Local_DNIPList, DNIPList **Temp_DNIPList, char *url)
 		    cur_Pair_In_Local_List &&
 		    strcmp(cur_Pair_In_Local_List->dn, destName) ==
 			    0) { //find in local
-			strcpy_s(ip_str, sizeof cur_Pair_In_Local_List->ip,
-					 cur_Pair_In_Local_List->ip);
+			#if _WIN64
+				strcpy_s(ip_str, sizeof cur_Pair_In_Local_List->ip,
+						cur_Pair_In_Local_List->ip);
+			#elif __linux__
+				memcpy(ip_str,cur_Pair_In_Local_List->ip,sizeof cur_Pair_In_Local_List->ip);
+			#endif
 			if (level > 0) {
-				printf("´Ó±¾µØ¶ÔÕÕ±í»ñÈ¡IP³É¹¦\n");
+				printf("ï¿½Ó±ï¿½ï¿½Ø¶ï¿½ï¿½Õ±ï¿½ï¿½ï¿½È¡IPï¿½É¹ï¿½\n");
 			}
 			return ip_str;
 
 		} else if (cur_Pair_In_Temp_List &&
 			   strcmp(cur_Pair_In_Temp_List->dn,
 				  destName) == 0 && cur_Pair_In_Temp_List->expire_time > now) { //find in temp
-			strcpy_s(ip_str, sizeof cur_Pair_In_Temp_List->ip,
-					 cur_Pair_In_Temp_List->ip);
+			#if _WIN64
+				strcpy_s(ip_str, sizeof cur_Pair_In_Temp_List->ip,
+						cur_Pair_In_Temp_List->ip);
+			#elif __linux__
+				memcpy(ip_str,cur_Pair_In_Temp_List->ip,sizeof cur_Pair_In_Temp_List->ip);
+			#endif
 			if (level > 0) {
-				printf("´ÓÍøÂç»º´æ±í»ñÈ¡IP³É¹¦\n");
+				printf("ï¿½ï¿½ï¿½ï¿½ï¿½ç»ºï¿½ï¿½ï¿½ï¿½ï¿½È¡IPï¿½É¹ï¿½\n");
 			}
 			LRU(Temp_DNIPList, cur_Pair_In_Temp_List,
 			    cur_Pair_In_Temp_List_ahead);
@@ -82,6 +90,10 @@ char *Ip_str(DNIPList **Local_DNIPList, DNIPList **Temp_DNIPList, char *url)
 			cur_Pair_In_Temp_List = cur_Pair_In_Temp_List->nextPtr;
 		}
 	}
-	strcpy_s(ip_str, 17, "failed");
+	#if _WIN64
+		strcpy_s(ip_str, 17, "failed");
+	#elif __linux__
+		memcpy(ip_str,"failed",17);
+	#endif
 	return ip_str;
 }

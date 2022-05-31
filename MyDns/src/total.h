@@ -2,17 +2,60 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
+#ifdef _WIN32 //define something for Windows (32-bit and 64-bit, this part is common)
+
+    #ifdef _WIN64 //define something for Windows (64-bit only)
+		#include <WinSock2.h>
+		#include <Windows.h>
+		#include <process.h>
+		#include <WS2tcpip.h>
+		#pragma comment(lib, "ws2_32.lib")
+    #else //define something for Windows (32-bit only)
+
+    #endif
+
+#elif __APPLE__
+
+    #include "TargetConditionals.h"
+
+    #if TARGET_IPHONE_SIMULATOR // iOS Simulator
+
+    #elif TARGET_OS_IPHONE // iOS device
+
+    #elif TARGET_OS_MAC // Other kinds of Mac OS
+
+    #else
+
+    # error "Unknown Apple platform"
+
+    #endif
+
+#elif __ANDROID__ // android
+
+#elif __linux__ // linux
+	#include<errno.h>
+	#include<sys/socket.h>
+	#include<fcntl.h>
+	#include<arpa/inet.h>
+	#include<netinet/in.h>
+	#include<unistd.h>
+#elif __unix__ // all unices not caught above // Unix
+
+#elif defined(_POSIX_VERSION) // POSIX
+
+#else
+	# error "Unknown compiler"
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <WinSock2.h>
-#include <Windows.h>
-#include <process.h>
+#include <cstring>
 #include <time.h>
 #include <fstream>
 #include <stdbool.h>
-#include <WS2tcpip.h>
-#pragma comment(lib, "ws2_32.lib")
+#include <math.h>
+
+
 
 //constant defination
 #define ID_TRANS_SIZE 32 /* The max size of ID_TRANS_TABLE*/
@@ -75,8 +118,8 @@ typedef struct DNIPList {
 
 typedef struct ID_TRANS_CELL {
 	unsigned short last_ID; /* The old id*/
-	BOOL done;          /*Mark whether the request was analysed completely*/
-	SOCKADDR_IN client; /*Requestor socket address*/
+	bool done;          /*Mark whether the request was analysed completely*/
+	sockaddr_in client; /*Requestor socket address*/
 	char url[DNameMaxLen]; /*URL*/
 	int expire_time;    /*The time to die*/
 } ID_TRANS_CELL;//ID translate table, this table stores some initial information in dns message
@@ -141,7 +184,7 @@ int Get_TLDLength(char *p);
 /// <param name="url">name</param>
 /// <returns>index in the table</returns>
 unsigned short generate_new_id(unsigned short id, sockaddr_in cli, int ttl,
-			       char *url);
+				char *url);
 
 /// <summary>
 /// Print our team message
@@ -185,9 +228,9 @@ void receiveFromExtern();
 void PrintTime();
 
 /// <summary>
-/// Êä³öDNS±¨ÎÄ»Ø´ðÇø¶ÎÐÅÏ¢
+/// ï¿½ï¿½ï¿½DNSï¿½ï¿½ï¿½Ä»Ø´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 /// </summary>
-/// <param name="packet">Òª´òÓ¡µÄDNS±¨ÎÄ</param>
-/// <param name="level">µ÷ÊÔµÈ¼¶</param>
+/// <param name="packet">Òªï¿½ï¿½Ó¡ï¿½ï¿½DNSï¿½ï¿½ï¿½ï¿½</param>
+/// <param name="level">ï¿½ï¿½ï¿½ÔµÈ¼ï¿½</param>
 void PrintAnswer(DNS_PACKET packet, char *buf);
 

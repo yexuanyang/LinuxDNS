@@ -10,31 +10,36 @@ extern char fileName[129];
 void Read_scheurl(DNIPList **local_dniplist,DNIPList **extern_dniplist)
 {
 	FILE *fp;
-	int count = 0;//ÓÃÓÚ¼ÇÂ¼ÓÐ¶àÉÙ¸ö½Úµã
-	DNIPList *last;//Ö¸ÏòÎ²²¿µÄÖ¸Õë
-	fopen_s(&fp,fileName, "r"); //Ö»¶Á·½Ê½´ò¿ªÎÄ¼þ
+	
+	int count = 0;//ï¿½ï¿½ï¿½Ú¼ï¿½Â¼ï¿½Ð¶ï¿½ï¿½Ù¸ï¿½ï¿½Úµï¿½
+	DNIPList *last;//Ö¸ï¿½ï¿½Î²ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
+	#if _win64
+	fopen_s(&fp,fileName, "r"); //Ö»ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½Ä¼ï¿½
+	#elif __linux__
+	fp = fdopen(open(fileName,O_RDONLY),"r"); //Ö»ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½Ä¼ï¿½
+	#endif
 	if (!fp) {
-		printf("Read scheduled URL failed.\n"); //¶ÁÈ¡´íÎó
+		printf("Read scheduled URL failed.\n"); //ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½
 		return;
 	}
 	char url[129], ip[16];
 	*local_dniplist = (DNIPList *)malloc(sizeof(DNIPList));
-	//³õÊ¼»¯
-	if (!*local_dniplist) {//·ÖÅäÄÚ´æÊ§°Ü
+	//ï¿½ï¿½Ê¼ï¿½ï¿½
+	if (!*local_dniplist) {//ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½Ê§ï¿½ï¿½
 		return;
 	}
 	memset((*local_dniplist)->dn, 0, sizeof((*local_dniplist)->dn));
 	memset((*local_dniplist)->ip, 0, sizeof((*local_dniplist)->ip)); 
 	(*local_dniplist)->expire_time = -1;
 	(*local_dniplist)->nextPtr = NULL; 
-	(*local_dniplist)->length = 1;//ËãÈëÁËÍ·½ÚµãµÄ³¤¶È
-	last = *local_dniplist;//ÈÃÎ²²¿Ö¸ÏòÏÖÔÚµÄÎ»ÖÃ
+	(*local_dniplist)->length = 1;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½Úµï¿½Ä³ï¿½ï¿½ï¿½
+	last = *local_dniplist;//ï¿½ï¿½Î²ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½Î»ï¿½ï¿½
 	while (!feof(fp) ){
-		fscanf_s(fp, "%s %s", ip, (unsigned)sizeof ip, url,
+		fscanf(fp, "%s %s", ip, (unsigned)sizeof ip, url,
 			 (unsigned)sizeof url);
 		count++;
-		DNIPList *temp = (DNIPList *)malloc(sizeof(DNIPList));//ÐÂ½Úµã
-		if (!temp) {//·ÖÅäÄÚ´æÊ§°Ü
+		DNIPList *temp = (DNIPList *)malloc(sizeof(DNIPList));//ï¿½Â½Úµï¿½
+		if (!temp) {//ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½Ê§ï¿½ï¿½
 			return;
 		}
 		memset(temp->dn, 0, sizeof(temp->dn));
@@ -46,17 +51,17 @@ void Read_scheurl(DNIPList **local_dniplist,DNIPList **extern_dniplist)
 			       ip);
 			
 		}
-		memcpy_s(temp->ip,sizeof ip, ip, sizeof ip);//¸³Öµ
-		memcpy_s(temp->dn,sizeof url , url , sizeof url);
-		temp->expire_time = INFINITE;
+		memcpy(temp->ip, ip, sizeof ip);//ï¿½ï¿½Öµ
+		memcpy(temp->dn, url , sizeof url);
+		temp->expire_time = INFINITY;
 		last->nextPtr = temp;
-		last = temp;//µ÷ÕûÎ²²¿
+		last = temp;//ï¿½ï¿½ï¿½ï¿½Î²ï¿½ï¿½
 		(*local_dniplist)->length++;
 	}
 	fclose(fp);
 	printf("%d data have been saved\n", count);
 	DNIPList *temp = (*local_dniplist)->nextPtr;
-	//Êä³ö±¾µØµÄ±í
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ØµÄ±ï¿½
 	for (int i = 0; i < count; i++) {
 		printf("Data %d, URL:%s -> IP:%s\n", i + 1, temp->dn, temp->ip);
 		temp = temp->nextPtr;

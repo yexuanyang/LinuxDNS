@@ -2,7 +2,6 @@
 
 
 extern struct sockaddr_in client;
-extern SOCKET inDNS;
 
 DNS_PACKET receiveDNS(char *buf)
 {
@@ -11,12 +10,12 @@ DNS_PACKET receiveDNS(char *buf)
 	packet.AR = NULL;
 	packet.NS = NULL;
 	packet.questions = NULL;
-	//char buf[BUFSIZE],BUFSIZEÖµÎª1024£¬Îª×î´ó±¨ÎÄ»º´æ´óÐ¡£¬bufÔÝ´æ±¨ÎÄ
-	int DNLength;                 //ÓòÃûµÄ×Ö½Ú³¤¶È
+	//char buf[BUFSIZE],BUFSIZEÖµÎª1024ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½bufï¿½Ý´æ±¨ï¿½ï¿½
+	int DNLength;                 //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö½Ú³ï¿½ï¿½ï¿½
 	int lenOfClient = sizeof client;
 	char *p = buf;
 
-	memcpy(&packet.header, buf, 12); //bufÖÐÇ°12¸ö×Ö·ûÖ±½ÓÌîÈë±¨ÎÄÍ·
+	memcpy(&packet.header, buf, 12); //bufï¿½ï¿½Ç°12ï¿½ï¿½ï¿½Ö·ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ë±¨ï¿½ï¿½Í·
 	unsigned short id = ntohs(packet.header.id);
 	memcpy(&packet.header, &id, sizeof(id));
 	unsigned short qdcount = ntohs(packet.header.qdcount);
@@ -32,10 +31,10 @@ DNS_PACKET receiveDNS(char *buf)
 		packet.questions = (QUESTION *)malloc(sizeof(QUESTION) *
 								qdcount);
 		if (packet.questions != NULL) {
-			p = buf + 12; //Ö¸ÕëpÖ¸Ïòquestions²¿·Ö
+			p = buf + 12; //Ö¸ï¿½ï¿½pÖ¸ï¿½ï¿½questionsï¿½ï¿½ï¿½ï¿½
 			for (unsigned i = 0; i < qdcount;
-					i++) { //½«Êý¾ÝÌîÈëquestion²¿·Ö
-				DNLength = Get_TLDLength(p); //»ñÈ¡ÓòÃûµÄ×Ö½Ú³¤¶È
+					i++) { //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½questionï¿½ï¿½ï¿½ï¿½
+				DNLength = Get_TLDLength(p); //ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö½Ú³ï¿½ï¿½ï¿½
 				memcpy(packet.questions[i].qname, p, DNLength);//name
 				unsigned short type;
 				memcpy(&type,p + DNLength, 2);//type
@@ -54,7 +53,7 @@ DNS_PACKET receiveDNS(char *buf)
 	if (ancount != 0) {
 		packet.AN = (RR *)malloc(sizeof(RR) * ancount);
 		if (packet.AN != NULL) {
-			for (unsigned i = 0; i < ancount; i++) { //½«Êý¾ÝÌîÈëAN²¿·Ö
+			for (unsigned i = 0; i < ancount; i++) { //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ANï¿½ï¿½ï¿½ï¿½
 				DNLength = 2;
 				memcpy(packet.AN[i].name, p, DNLength);//name
 
@@ -95,7 +94,7 @@ DNS_PACKET receiveDNS(char *buf)
 	if (nscount != 0) {
 		packet.NS = (RR *)malloc(sizeof(RR) * nscount);
 		if (packet.NS != NULL) {
-			for (unsigned i = 0; i < nscount; i++) { //½«Êý¾ÝÌîÈëNS²¿·Ö
+			for (unsigned i = 0; i < nscount; i++) { //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½NSï¿½ï¿½ï¿½ï¿½
 				DNLength = 2;
 				memcpy(packet.NS[i].name, p, DNLength);//name
 
@@ -132,7 +131,7 @@ DNS_PACKET receiveDNS(char *buf)
 	if (arcount != 0) {
 		packet.AR = (RR *)malloc(sizeof(RR) * arcount);
 		if (packet.AR != NULL) {
-			for (unsigned i = 0; i < arcount; i++) { //½«Êý¾ÝÌîÈëAR²¿·Ö
+			for (unsigned i = 0; i < arcount; i++) { //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ARï¿½ï¿½ï¿½ï¿½
 				
 				DNLength = 2;
 				memcpy(packet.AR[i].name, p, DNLength); //name

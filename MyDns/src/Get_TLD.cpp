@@ -5,30 +5,30 @@ void Get_TLD(char *buf, char *dest,unsigned long long offset)
 {
 	char *bufT = buf + offset;
 	int i = 0, j = 0,
-	    k = 0; //iÊÇ±¨ÎÄÀïµÄÏÂ±ê£¬jÊÇ¼ÆÊıÊÇ¼¸£¬kÊÇÄ¿±êÎ»ÖÃÏÂ±ê£¬
+	    k = 0; //iï¿½Ç±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â±ê£¬jï¿½Ç¼ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½ï¿½ï¿½kï¿½ï¿½Ä¿ï¿½ï¿½Î»ï¿½ï¿½ï¿½Â±ê£¬
 	while (bufT[i] != 0 &&
 	       (unsigned char)bufT[i] !=
-		       0xc0) { //Ã»µ½´ïÓòÃû½áÎ²   (c¿ªÍ·µÄÎªÓòÃûÑ¹Ëõ±íÊ¾)
+		       0xc0) { //Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î²   (cï¿½ï¿½Í·ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½Ê¾)
 		if (bufT[i] > 0 &&
 		    bufT[i] <=
-			    63) //Èç¹ûbuf[i]Îª¼ÆÊı×Ö½Ú£¨ÀıÈç3www5baidu3comÖĞµÄ3£¬5£¬3£©
+			    63) //ï¿½ï¿½ï¿½buf[i]Îªï¿½ï¿½ï¿½ï¿½ï¿½Ö½Ú£ï¿½ï¿½ï¿½ï¿½ï¿½3www5baidu3comï¿½Ğµï¿½3ï¿½ï¿½5ï¿½ï¿½3ï¿½ï¿½
 		{
 			for (j = bufT[i], i++; j > 0; j--, i++, k++)
 				dest[k] = bufT[i];
 		}
-		if (bufT[i] != 0) //Èç¹ûÃ»½áÊø¾ÍÔÚdestÀï¼Ó¸ö'.'
+		if (bufT[i] != 0) //ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½destï¿½ï¿½Ó¸ï¿½'.'
 		{
 			dest[k] = '.';
 			k++;
 		}
 	}
 	dest[k] = '\0';
-	if (bufT[i] != 0){//Ñ¹ËõĞÎÊ½±íÊ¾µÄÓòÃû
+	if (bufT[i] != 0){//Ñ¹ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		unsigned short offsetT = (((unsigned short)bufT[i]) << 8 |
 					 (unsigned char)bufT[i + 1]) &
 					0x3fff;
 		char rest[DNameMaxLen];
 		Get_TLD(buf,rest,offsetT);
-		strcat_s(dest, strlen(dest) + strlen(rest) + 1, rest);
+		strcat(dest,rest);
 	}
 }
