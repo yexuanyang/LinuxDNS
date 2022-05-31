@@ -344,9 +344,14 @@ int main(int argc, char *argv[])
 	
 	int in = bind(inDNS, (struct sockaddr *)&local_name, sizeof(struct sockaddr));
 	int out = bind(outDNS, (struct sockaddr *)&extern_name, sizeof(struct sockaddr));
-	if ( in && out) {
+	if ( in || out) {
 		#if _WIN64
-		printf("ERROR! BIND FAILED! error code:%d\n",WSAGetLastError());
+		if (in)
+			printf("ERROR! INDNS BIND FAILED! error code:%d\n",
+			       WSAGetLastError());
+		if (out)
+			printf("ERROR! OUTDNS BIND FAILED! error code:%d\n",
+			       WSAGetLastError());
 		#elif __linux__
 		if(in)
 		printf("ERROR! INDNS BIND FAILED! error information:%s\n",strerror(errno) );
