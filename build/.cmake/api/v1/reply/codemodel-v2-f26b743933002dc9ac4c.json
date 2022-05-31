@@ -57,14 +57,14 @@
 				{
 					"directoryIndex" : 1,
 					"id" : "MyDns::@90a2315b7a9c97cd24d2",
-					"jsonFile" : "target-MyDns-Debug-cd0328cca164680ac784.json",
+					"jsonFile" : "target-MyDns-Debug-74d5cf71b1c914f15d01.json",
 					"name" : "MyDns",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 1,
 					"id" : "dns::@90a2315b7a9c97cd24d2",
-					"jsonFile" : "target-dns-Debug-5399ab122a71d91b7acd.json",
+					"jsonFile" : "target-dns-Debug-1d3c557af44c7dfd3a8b.json",
 					"name" : "dns",
 					"projectIndex" : 0
 				}

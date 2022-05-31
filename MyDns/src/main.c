@@ -332,9 +332,11 @@ int main(int argc, char *argv[])
 		inDNS, SOL_SOCKET, SO_REUSEADDR, (const char *)&reuse,
 		sizeof(reuse))){
 			#if _win64
-			printf("setsockopt failed! error code:%d\n",WSAGetLastError()); //SO_REUSEADDR������ͬһ�˿�������ͬһ�������Ķ��ʵ��	
+			printf("setsockopt failed! error code:%d\n",WSAGetLastError()); 
+			//SO_REUSEADDR������ͬһ�˿�������ͬһ�������Ķ��ʵ��	
 			#elif __linux__
-			printf("setsockopt failed! error information:%s\n",strerror(errno)); //SO_REUSEADDR������ͬһ�˿�������ͬһ�������Ķ��ʵ��	
+			printf("setsockopt failed! error information:%s\n",strerror(errno)); 
+			//SO_REUSEADDR������ͬһ�˿�������ͬһ�������Ķ��ʵ��	
 			#endif	
 		}
 		
