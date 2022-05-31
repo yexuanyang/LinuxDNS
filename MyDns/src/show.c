@@ -10,7 +10,7 @@ void PrintTime()
 	time(&t);
 	struct tm defaultTm = {0, 0, 0, 1, 1, 0, 0, 0, 0};
 	struct tm *time = &defaultTm;
-	#if _win64
+	#if _WIN64
 	localtime_s(time, &t);
 	#elif __linux__
 	time = localtime(&t);

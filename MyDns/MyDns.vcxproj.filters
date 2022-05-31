@@ -15,35 +15,35 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="dn2ip.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="generate_new_id.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Get_TLD.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Read_scheurl.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="receiveDNS.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="show.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="total.h">
+    <ClInclude Include="src\total.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="dest.txt">
+    <ClCompile Include="src\dn2ip.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\generate_new_id.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Get_TLD.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Read_scheurl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\receiveDNS.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\show.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\dest.txt">
       <Filter>资源文件</Filter>
     </Text>
   </ItemGroup>
