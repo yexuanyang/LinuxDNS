@@ -46,7 +46,7 @@ void getLevel(int argc, char *argv[])
 
 void showBuffer(char *buf, int length)
 {
-	printf(" ��ȡ���İ����ݳ��ȣ�%d\n��ȡ�İ����ݣ�\n ", length);
+	printf(" 获取到的包数据长度：%d\n获取的包数据：\n ", length);
 	for (int i = 0; i < length; i++) {
 		printf("%02x ", (unsigned char)buf[i]);
 		if ((i + 1) % 40 == 0) {
@@ -79,10 +79,10 @@ void receiveFromLocal()
 		if (level > 0) {
 			PrintTime();
 			
-			printf(" �ͻ���IP��  %s:%u\n",
+			printf(" 客户端IP：  %s:%u\n",
 			       inet_ntoa(client.sin_addr), client.sin_port);
 				
-			printf(" ѯ�ʵ�����: %s\n", url);
+			printf(" 询问的域名: %s\n", url);
 			if (level > 1) {
 				showBuffer(buf, dataLength);
 				Show_DNSPacket(packet,buf);
@@ -141,11 +141,11 @@ void receiveFromLocal()
 					    length_client);
 
 			if (dataLength < 0) {
-				printf(" ���Ͱ�ʧ��\n");
+				printf(" 发送包失败\n");
 			}
 
 			if (level > 0) {
-				printf(" ���ͻ�Ӧ���� url:%s -> ip:%s\n", url,
+				printf(" 发送回应包： url:%s -> ip:%s\n", url,
 				       ip);
 			}
 

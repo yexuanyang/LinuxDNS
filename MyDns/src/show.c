@@ -17,7 +17,7 @@ void PrintTime()
 	#endif
 	strftime(curTime, sizeof(curTime), "%c",
 		 time);
-	printf("ʱ�䣺%s\n", curTime);
+	printf("时间：%s\n", curTime);
 	return;
 }
 
@@ -26,7 +26,7 @@ void PrintAnswer(DNS_PACKET packet,char *buf)
 	//�ش�Σ�
 	for (unsigned j = 0; j < packet.header.ancount; j++) {
 		unsigned short offset = ( ((unsigned short)packet.AN[j].name[0]) << 8 | (unsigned char)packet.AN[j].name[1] ) & 0x3fff;
-		printf("<==========�ش�����==========>\n\n");
+		printf("<==========回答区段==========>\n\n");
 		char url[DNameMaxLen];
 		Get_TLD(buf, url,offset);
 		printf("Name: %s \t", url);
@@ -57,7 +57,7 @@ void PrintAnswer(DNS_PACKET packet,char *buf)
 		//��Ȩ�Σ�
 		
 		for (unsigned i = 0; i < packet.header.nscount; i++) {
-			printf("<==========��Ȩ����==========>\n\n");
+			printf("<==========授权区段==========>\n\n");
 			printf("Name: %s \t", packet.NS[i].name);
 			PrintTime();
 			printf("Type: %u \tClass: %u\t TTL: %u\t DataLen: %u\n",
@@ -67,7 +67,7 @@ void PrintAnswer(DNS_PACKET packet,char *buf)
 		//������Դ�Σ�
 		
 		for (unsigned i = 0; i < packet.header.arcount; i++) {
-			printf("<==========������Դ����==========>\n\n");
+			printf("<==========额外资源区段==========>\n\n");
 			printf("Name: %s \t", packet.AR[i].name);
 			PrintTime();
 			printf("Type: %u \tClass: %u\t TTL: %u\t DataLen: %u\n",
@@ -82,7 +82,7 @@ void Show_DNSPacket(DNS_PACKET packet,char *buf)
 {
 	if (level == 2) {
 		printf("\n ID: %u \n QR: %x \n OPCODE: %x \n AA: %x \n TC: %x \n RD: %x \n RA: %x \n zero: %x \n rcode: %x \n\
- ������: %u \n ��Դ��¼��: %u \n ��Ȩ��Դ��¼��: %u \n ������Դ��¼��: %u \n",
+ 问题数: %u \n 资源记录数: %u \n 授权资源记录数: %u \n 额外资源记录数: %u \n",
 		       packet.header.id, packet.header.qr, packet.header.opcode,
 		       packet.header.aa, packet.header.tc, packet.header.rd,
 		       packet.header.ra, packet.header.z, packet.header.rcode,

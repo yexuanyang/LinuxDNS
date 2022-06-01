@@ -228,9 +228,9 @@ void receiveFromExtern();
 void PrintTime();
 
 /// <summary>
-/// ���DNS���Ļش�������Ϣ
+/// print dns message answer fields infomation
 /// </summary>
-/// <param name="packet">Ҫ��ӡ��DNS����</param>
-/// <param name="level">���Եȼ�</param>
+/// <param name="packet">dns message</param>
+/// <param name="level">debug level</param>
 void PrintAnswer(DNS_PACKET packet, char *buf);
 
