@@ -273,18 +273,18 @@ int main(int argc, char *argv[])
 	outDNS = socket(AF_INET, SOCK_DGRAM, 0);
 	if (inDNS < 0){
 		#if _WIN64
-		printf("create socket failed! error code:%d",WSAGetLastError());
+		printf("create inDNS socket failed! error code:%d",WSAGetLastError());
 		#elif __linux__
-		printf("create socket failed! error information:%s\n",strerror(errno));
+		printf("create inDNS socket failed! error information:%s\n",strerror(errno));
 		#endif
 	}
 		
 	if(outDNS < 0){
 		#if _WIN64
-		printf("create socket failed! error code:%d",
+		printf("create outDNS socket failed! error code:%d",
 		       WSAGetLastError());
 		#elif __linux__
-		printf("create socket failed! error information:%s\n",
+		printf("create outDNS socket failed! error information:%s\n",
 				strerror(errno));
 		#endif
 	}
@@ -297,7 +297,7 @@ int main(int argc, char *argv[])
 	memset(&extern_name, 0, sizeof extern_name);
 
 	local_name.sin_family = AF_INET;
-	local_name.sin_addr.s_addr = INADDR_ANY;
+	local_name.sin_addr.s_addr = inet_addr("127.0.0.1");
 	local_name.sin_port = htons(DNS_PORT);
 
 	extern_name.sin_family = AF_INET;
@@ -313,17 +313,11 @@ int main(int argc, char *argv[])
 
 	int unblock = 1;
 	#if _WIN64
-	if(ioctlsocket(inDNS, FIONBIO, (u_long FAR *)&unblock))
+	if(ioctlsocket(inDNS, FIONBIO, (u_long FAR *)&unblock)||ioctlsocket(outDNS, FIONBIO, (u_long FAR *)&unblock))
 		printf("ioctlsocket failed! error code:%d\n",WSAGetLastError()); //�����׽��ַ�����
 	
-	if(ioctlsocket(outDNS, FIONBIO, (u_long FAR *)&unblock))
-		printf("ioctlsocket failed! error code:%d\n",
-		       WSAGetLastError()); //�ⲿ�׽��ַ�����
 	#elif __linux__
-	if(fcntl(inDNS,F_SETFL,O_NONBLOCK)){
-		printf("fcntl failed! error information:%s\n",strerror(errno));
-	}
-	if(fcntl(outDNS,F_SETFL,O_NONBLOCK)){
+	if(fcntl(inDNS,F_SETFL,O_NONBLOCK)||fcntl(outDNS,F_SETFL,O_NONBLOCK)){
 		printf("fcntl failed! error information:%s\n",strerror(errno));
 	}
 	#endif
@@ -343,20 +337,14 @@ int main(int argc, char *argv[])
 	//SOL_SOCKET���׽��ּ���������ѡ��
 	
 	int in = bind(inDNS, (struct sockaddr *)&local_name, sizeof(struct sockaddr));
-	int out = bind(outDNS, (struct sockaddr *)&extern_name, sizeof(struct sockaddr));
-	if ( in || out) {
+	if ( in) {
 		#if _WIN64
 		if (in)
 			printf("ERROR! INDNS BIND FAILED! error code:%d\n",
 			       WSAGetLastError());
-		if (out)
-			printf("ERROR! OUTDNS BIND FAILED! error code:%d\n",
-			       WSAGetLastError());
 		#elif __linux__
 		if(in)
-		printf("ERROR! INDNS BIND FAILED! error information:%s\n",strerror(errno) );
-		if(out)
-		printf("ERROR! OUTDNS BIND FAILED! error information:%s\n",strerror(errno) );
+			printf("ERROR! INDNS BIND FAILED! error information:%s\n",strerror(errno) );
 		#endif
 		exit(1);
 	}else {
