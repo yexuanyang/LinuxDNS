@@ -150,7 +150,7 @@ void receiveFromLocal()
 			}
 
 		} else { //���ⲿDNS��
-			printf(" url: %s �ڱ���DNS���������ܽ��������������ⲿDNS\n",
+			printf(" url: %s 在本地DNS服务器不能解析，将发送至外部DNS\n",
 			       url);
 			unsigned short pid;
 			memcpy(&pid, buf, sizeof(unsigned short));
@@ -168,7 +168,7 @@ void receiveFromLocal()
 						    (struct sockaddr *)&extern_name,
 						    sizeof extern_name);
 				if (level > 0) {
-					printf(" ���ⲿDNS��������.  url: %s\n",
+					printf(" 向外部DNS发送请求.  url: %s\n",
 					       url);
 				}
 			}
@@ -192,7 +192,7 @@ void receiveFromExtern()
 	if (datalength > -1) {
 		printf("\n receive form extern server successfully!\n\n");
 		if (level > 0) {
-			printf(" �ⲿDNS������IP��%s\n",
+			printf(" 外部DNS服务器IP：%s\n",
 			       inet_ntoa(extern_dns.sin_addr));
 
 			PrintTime();
@@ -212,7 +212,7 @@ void receiveFromExtern()
 		if(trans_count > 0)
 			trans_count--;
 		if (level > 1) {
-			printf(" ת��������:%d \n", trans_count);
+			printf(" 转换表项数:%d \n", trans_count);
 		}
 		trans_table[indexInTable].done = true;
 		DNIPList *newNode = (DNIPList*)malloc(sizeof(DNIPList));
