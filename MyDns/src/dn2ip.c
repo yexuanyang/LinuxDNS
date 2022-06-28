@@ -23,7 +23,7 @@ void LRU(DNIPList** head, DNIPList* destNode,DNIPList* destNodeAhead) {
 		(*head)->nextPtr = destNode;
 	}
 	DNIPList *prinTemp = NULL;
-	prinTemp = (*head)->nextPtr; //ָ����һ��
+	prinTemp = (*head)->nextPtr; // get the first node
 	if (level >= 2) {
 		printf("========= Cache ========\n");
 		for (int i = 0; prinTemp != NULL;

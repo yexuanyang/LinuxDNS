@@ -1,6 +1,6 @@
 #include "total.h"
 
-//ȫ�ֱ�������
+
 int level = 0;                            //debug level
 ID_TRANS_CELL trans_table[ID_TRANS_SIZE]; /*The ID_TRANS_TABLE*/
 int trans_count = 0;                      /*The cells of trans_table now*/
@@ -88,9 +88,9 @@ void receiveFromLocal()
 				Show_DNSPacket(packet,buf);
 			}
 		}
-		char *ip = Ip_str(local_dniplist, extern_dniplist, url);
-		//�ڱ��ػ������绺����ҵ�
-		if (strcmp(ip ,"failed") != 0) {
+		char *ip = Ip_str(local_dniplist, extern_dniplist, url);// find in the local data or temporary data
+		
+		if (strcmp(ip ,"failed") != 0) {// successfully
 			if (level > 0) {
 				PrintTime();
 				printf("url:%s -> IP: %s\n", url, ip);
@@ -149,7 +149,7 @@ void receiveFromLocal()
 				       ip);
 			}
 
-		} else { //���ⲿDNS��
+		} else { // send to outer DNS
 			printf(" url: %s 在本地DNS服务器不能解析，将发送至外部DNS\n",
 			       url);
 			unsigned short pid;
@@ -234,7 +234,7 @@ void receiveFromExtern()
 			ip_addr.S_un.S_addr = (unsigned)packet.AN->Rdata[0] << 24 |
 				      (unsigned)packet.AN->Rdata[1] << 16 & 0x00ff0000|
 				      (unsigned)packet.AN->Rdata[2] << 8 & 0x0000ff00|
-				      (unsigned)packet.AN->Rdata[3] & 0x000000ff;
+				      (unsigned)packet.AN->Rdata[3] & 0x000000ff;// get the IP address 
 			#elif __linux__
 			ip_addr.s_addr = (unsigned)packet.AN->Rdata[0] << 24 |
 				      (unsigned)packet.AN->Rdata[1] << 16 & 0x00ff0000|
@@ -262,7 +262,9 @@ int main(int argc, char *argv[])
 	local_dniplist = (DNIPList**)malloc(sizeof(DNIPList*));
 	extern_dniplist = (DNIPList**)malloc(sizeof(DNIPList*));
 	print_team_msg();
-	getLevel(argc, argv);
+	getLevel(argc, argv);//get debug level
+
+	//start Asynchronous winsocket
 	#if _WIN64
 	WSADATA wsadata;
 	if (WSAStartup(MAKEWORD(2, 2), &wsadata))
@@ -291,10 +293,10 @@ int main(int argc, char *argv[])
 		
 	
 
-	Read_scheurl(local_dniplist, extern_dniplist);
+	Read_scheurl(local_dniplist, extern_dniplist);// load local data
 
 	memset(&local_name, 0, sizeof local_name);
-	memset(&extern_name, 0, sizeof extern_name);
+	memset(&extern_name, 0, sizeof extern_name);// extern_name is outer dns
 
 	local_name.sin_family = AF_INET;
 	local_name.sin_addr.s_addr = inet_addr("127.0.0.1");
@@ -314,11 +316,11 @@ int main(int argc, char *argv[])
 	int unblock = 1;
 	#if _WIN64
 	if(ioctlsocket(inDNS, FIONBIO, (u_long FAR *)&unblock)||ioctlsocket(outDNS, FIONBIO, (u_long FAR *)&unblock))
-		printf("ioctlsocket failed! error code:%d\n",WSAGetLastError()); //�����׽��ַ�����
+		printf("ioctlsocket failed! error code:%d\n",WSAGetLastError()); //Local socket non blocking
 	
 	#elif __linux__
 	if(fcntl(inDNS,F_SETFL,O_NONBLOCK)||fcntl(outDNS,F_SETFL,O_NONBLOCK)){
-		printf("fcntl failed! error information:%s\n",strerror(errno));
+		printf("fcntl failed! error information:%s\n",strerror(errno)); //Local socket non blocking
 	}
 	#endif
 	int reuse = 1;
@@ -327,14 +329,14 @@ int main(int argc, char *argv[])
 		sizeof(reuse))){
 			#if _WIN64
 			printf("setsockopt failed! error code:%d\n",WSAGetLastError()); 
-			//SO_REUSEADDR������ͬһ�˿�������ͬһ�������Ķ��ʵ��	
+			//SO_REUSEADDR allows you to start multiple instances of the same server on the same port
 			#elif __linux__
 			printf("setsockopt failed! error information:%s\n",strerror(errno)); 
-			//SO_REUSEADDR������ͬһ�˿�������ͬһ�������Ķ��ʵ��	
+			//SO_REUSEADDR allows you to start multiple instances of the same server on the same port	
 			#endif	
 		}
 		
-	//SOL_SOCKET���׽��ּ���������ѡ��
+	//SOL_SOCKET sets options at the socket level
 	
 	int in = bind(inDNS, (struct sockaddr *)&local_name, sizeof(struct sockaddr));
 	if ( in) {

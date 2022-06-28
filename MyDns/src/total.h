@@ -129,9 +129,9 @@ typedef struct ID_TRANS_CELL {
 /// <summary>
 /// Get the ip address of domain name
 /// </summary>
-/// <param name="Local_DNIPList">local table of name and ip</param>
-/// <param name="Temp_DNIPList">temporary table of name and ip</param>
-/// <param name="url">serch name</param>
+/// <param name="Local_DNIPList">:local table of name and ip</param>
+/// <param name="Temp_DNIPList">:temporary table of name and ip</param>
+/// <param name="url">:serch name</param>
 /// <returns>
 /// successfully return ip address; 
 /// failed return string"failed"
@@ -141,47 +141,47 @@ char *Ip_str(DNIPList **Local_DNIPList, DNIPList **Temp_DNIPList, char *url);
 /// <summary>
 /// Show dns packet
 /// </summary>
-/// <param name="packet">dns packet</param>
-/// <param name="buf">dns message</param>
+/// <param name="packet">:dns packet</param>
+/// <param name="buf">:dns message</param>
 void Show_DNSPacket(DNS_PACKET packet, char *buf);
 
 /// <summary>
 /// read local file , generate the local table's node list and a null temporary table's node list
 /// </summary>
-/// <param name="local_dniplist"> store local table </param>
-/// <param name="extern_dniplist"> store temporary table </param>
+/// <param name="local_dniplist"> :store local table </param>
+/// <param name="extern_dniplist"> :store temporary table </param>
 void Read_scheurl(DNIPList **local_dniplist, DNIPList **extern_dniplist);
 
 /// <summary>
 /// Get the name in dns message
 /// </summary>
-/// <param name="buf">dns message's pointer </param>
-/// <param name="dest">store name </param>
-/// <param name="offset">search positon's offset </param>
+/// <param name="buf"> :dns message's pointer </param>
+/// <param name="dest"> :use to store name </param>
+/// <param name="offset"> :search positon's offset </param>
 void Get_TLD(char *buf, char *dest,unsigned long long offset);
 
 
 /// <summary>
 /// Get dns packet form dns message
 /// </summary>
-/// <param name="buf">dns message </param>
+/// <param name="buf">:dns message </param>
 /// <returns>dns packet</returns>
 DNS_PACKET receiveDNS(char *buf);
 
 /// <summary>
 /// Get name's length
 /// </summary>
-/// <param name="p">name's start pointer</param>
+/// <param name="p">:name's start pointer</param>
 /// <returns>length of name</returns>
 int Get_TLDLength(char *p);
 
 /// <summary>
 /// Store dns message information in table and return the index in table
 /// </summary>
-/// <param name="id">initial id</param>
-/// <param name="cli">initial client, where the dns message from </param>
-/// <param name="ttl">time to live in this table</param>
-/// <param name="url">name</param>
+/// <param name="id">:initial id</param>
+/// <param name="cli">:initial client, where the dns message from </param>
+/// <param name="ttl">:time to live in this table</param>
+/// <param name="url">:name</param>
 /// <returns>index in the table</returns>
 unsigned short generate_new_id(unsigned short id, struct sockaddr_in cli, int ttl,
 				char *url);
@@ -194,22 +194,22 @@ void print_team_msg();
 /// <summary>
 /// Get the debug level
 /// </summary>
-/// <param name="argc">command word number</param>
-/// <param name="argv">command word list</param>
+/// <param name="argc">:command word number</param>
+/// <param name="argv">:command word list</param>
 void getLevel(int argc, char *argv[]);
 
 /// <summary>
 /// Add node to Tempoary List
 /// </summary>
-/// <param name="extern_dniplist">Tempoary List's head pointer</param>
-/// <param name="newNode">the node to add</param>
+/// <param name="extern_dniplist">:Tempoary List's head pointer</param>
+/// <param name="newNode">:the node to add</param>
 void addToExternDniplist(DNIPList **extern_dniplist, DNIPList *newNode);
 
 /// <summary>
 /// Show dns message
 /// </summary>
-/// <param name="buf">dns message</param>
-/// <param name="length">dns message length</param>
+/// <param name="buf">:dns message</param>
+/// <param name="length">:dns message length</param>
 void showBuffer(char *buf, int length);
 
 /// <summary>
@@ -230,7 +230,7 @@ void PrintTime();
 /// <summary>
 /// print dns message answer fields infomation
 /// </summary>
-/// <param name="packet">dns message</param>
-/// <param name="level">debug level</param>
+/// <param name="packet">:dns message</param>
+/// <param name="level">:debug level</param>
 void PrintAnswer(DNS_PACKET packet, char *buf);
 

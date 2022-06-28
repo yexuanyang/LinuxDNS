@@ -23,7 +23,7 @@ void PrintTime()
 
 void PrintAnswer(DNS_PACKET packet,char *buf)
 {
-	//�ش�Σ�
+	
 	for (unsigned j = 0; j < packet.header.ancount; j++) {
 		unsigned short offset = ( ((unsigned short)packet.AN[j].name[0]) << 8 | (unsigned char)packet.AN[j].name[1] ) & 0x3fff;
 		printf("<==========回答区段==========>\n\n");
@@ -54,7 +54,7 @@ void PrintAnswer(DNS_PACKET packet,char *buf)
 	}
 	
 	if (level == 2) {
-		//��Ȩ�Σ�
+		
 		
 		for (unsigned i = 0; i < packet.header.nscount; i++) {
 			printf("<==========授权区段==========>\n\n");
@@ -64,7 +64,7 @@ void PrintAnswer(DNS_PACKET packet,char *buf)
 			       packet.NS[i].RRtype, packet.NS[i].RRclass,
 			       packet.NS[i].TTL, packet.NS[i].dataLen);
 		}
-		//������Դ�Σ�
+		
 		
 		for (unsigned i = 0; i < packet.header.arcount; i++) {
 			printf("<==========额外资源区段==========>\n\n");

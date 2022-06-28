@@ -9,67 +9,70 @@ void Read_scheurl(DNIPList **local_dniplist, DNIPList **extern_dniplist)
 {
 	FILE *fp;
 
-	int count = 0;  //���ڼ�¼�ж��ٸ��ڵ�
-	DNIPList *last; //ָ��β����ָ��
+	int count = 0;//Used to record nodes number
+	DNIPList *last;// Pointer to tail
 #if _WIN64
-	fopen_s(&fp, fileName, "r"); //ֻ����ʽ���ļ�
+	fopen_s(&fp, fileName, "r"); // read-only pattern
 #elif __linux__
 	int fdint = open(fileName, O_RDONLY);
-	fp = fdopen(fdint, "r"); //ֻ����ʽ���ļ�
+	fp = fdopen(fdint, "r"); 
 #endif
-	if (!fp) {
-		printf("Read scheduled URL failed.\n"); //��ȡ����
+	if (!fp) {// read error
+		printf("Read scheduled URL failed.\n"); 
 		return;
 	}
 	char url[129], ip[16];
 	*local_dniplist = (DNIPList *)malloc(sizeof(DNIPList));
-	//��ʼ��
-	if (!*local_dniplist) { //�����ڴ�ʧ��
+	// initialization
+	if (!*local_dniplist) { // malloc error
 		return;
 	}
 	memset((*local_dniplist)->dn, 0, sizeof((*local_dniplist)->dn));
 	memset((*local_dniplist)->ip, 0, sizeof((*local_dniplist)->ip));
 	(*local_dniplist)->expire_time = -1;
 	(*local_dniplist)->nextPtr = NULL;
-	(*local_dniplist)->length = 1; //������ͷ�ڵ�ĳ���
-	last = *local_dniplist; //��β��ָ�����ڵ�λ��
+	(*local_dniplist)->length = 1; // the length of nodes including the head node
+	last = *local_dniplist; // initialize the last pointer 
 	while (!feof(fp)) {
 		fscanf(fp, "%s %s", ip, url);
 		count++;
-		DNIPList *temp = (DNIPList *)malloc(sizeof(DNIPList)); //�½ڵ�
-		if (!temp) { //�����ڴ�ʧ��
+		DNIPList *temp = (DNIPList *)malloc(sizeof(DNIPList));
+		if (!temp) { 
 			return;
 		}
-		memset(temp->dn, 0, sizeof(temp->dn));
-		memset(temp->ip, 0, sizeof(temp->ip));
-		(*local_dniplist)->expire_time = -1;
+		// initialize the node information
+		memset(temp->dn, 0, sizeof(temp->dn));// domain
+		memset(temp->ip, 0, sizeof(temp->ip));// ip
+		(*local_dniplist)->expire_time = -1;// expire time
 		temp->nextPtr = NULL;
 		if (level >= 1) {
 			printf("Read from 'dest.txt'->[URL:%s, IP:%s]\n", url,
 			       ip);
 		}
-		memcpy(temp->ip, ip, sizeof ip); //��ֵ
+		// assign the value 
+		memcpy(temp->ip, ip, sizeof ip); 
 		memcpy(temp->dn, url, sizeof url);
-		temp->expire_time = INFINITY;
+		temp->expire_time = INFINITY; // local data never expire
 		last->nextPtr = temp;
-		last = temp; //����β��
+		last = temp; // update the tail location
 		(*local_dniplist)->length++;
 	}
 	fclose(fp);
 	printf("%d data have been saved\n", count);
 	DNIPList *temp = (*local_dniplist)->nextPtr;
-	//������صı�
+	// print the local data 
 	for (int i = 0; i < count; i++) {
 		printf("Data %d, URL:%s -> IP:%s\n", i + 1, temp->dn, temp->ip);
 		temp = temp->nextPtr;
 	}
-	*extern_dniplist = (DNIPList *)malloc(sizeof(DNIPList));
+	// initialize the temporary data
+	*extern_dniplist = (DNIPList *)malloc(sizeof(DNIPList));// the head node of temporary data
 	memset((*extern_dniplist)->dn, 0, sizeof((*extern_dniplist)->dn));
 	memset((*extern_dniplist)->ip, 0, sizeof((*extern_dniplist)->ip));
 	(*extern_dniplist)->expire_time = -1;
 	(*extern_dniplist)->nextPtr = NULL;
 	(*extern_dniplist)->length = 1;
-	last->nextPtr = *extern_dniplist;
+	last->nextPtr = *extern_dniplist;//append to the local data
 	return;
 }
 
@@ -82,5 +85,5 @@ void print_team_msg()
 	printf("* ------------------------------------------------------------- *\n");
 	printf("*               DNS Relay Server - Ver 1.0                      *\n");
 	printf("*****************************************************************\n");
-	printf("Command syntax : MyDns [-d | -D] [dns-server-IP-addr]  \n");
+	printf("Command syntax : MyDns [-d | -D] [dns-server-IP-addr]  \n"			);
 }
