@@ -33,8 +33,8 @@ void Read_scheurl(DNIPList **local_dniplist, DNIPList **extern_dniplist)
 	(*local_dniplist)->nextPtr = NULL;
 	(*local_dniplist)->length = 1; // the length of nodes including the head node
 	last = *local_dniplist; // initialize the last pointer 
-	while (!feof(fp)) {
-		fscanf(fp, "%s %s", ip, url);
+	
+	while (fscanf(fp, "%s %s", ip, url) > 0) {
 		count++;
 		DNIPList *temp = (DNIPList *)malloc(sizeof(DNIPList));
 		if (!temp) { 

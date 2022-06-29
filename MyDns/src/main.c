@@ -46,7 +46,7 @@ void getLevel(int argc, char *argv[])
 
 void showBuffer(char *buf, int length)
 {
-	printf(" è·å–åˆ°çš„åŒ…æ•°æ®é•¿åº¦ï¼š%d\nè·å–çš„åŒ…æ•°æ®ï¼š\n ", length);
+	printf(" »ñÈ¡µ½µÄ°üÊı¾İ³¤¶È£º%d\n»ñÈ¡µÄ°üÊı¾İ£º\n ", length);
 	for (int i = 0; i < length; i++) {
 		printf("%02x ", (unsigned char)buf[i]);
 		if ((i + 1) % 40 == 0) {
@@ -79,10 +79,10 @@ void receiveFromLocal()
 		if (level > 0) {
 			PrintTime();
 			
-			printf(" å®¢æˆ·ç«¯IPï¼š  %s:%u\n",
+			printf(" ¿Í»§¶ËIP£º  %s:%u\n",
 			       inet_ntoa(client.sin_addr), client.sin_port);
 				
-			printf(" è¯¢é—®çš„åŸŸå: %s\n", url);
+			printf(" Ñ¯ÎÊµÄÓòÃû: %s\n", url);
 			if (level > 1) {
 				showBuffer(buf, dataLength);
 				Show_DNSPacket(packet,buf);
@@ -141,16 +141,16 @@ void receiveFromLocal()
 					    length_client);
 
 			if (dataLength < 0) {
-				printf(" å‘é€åŒ…å¤±è´¥\n");
+				printf(" ·¢ËÍ°üÊ§°Ü\n");
 			}
 
 			if (level > 0) {
-				printf(" å‘é€å›åº”åŒ…ï¼š url:%s -> ip:%s\n", url,
+				printf(" ·¢ËÍ»ØÓ¦°ü£º url:%s -> ip:%s\n", url,
 				       ip);
 			}
 
 		} else { // send to outer DNS
-			printf(" url: %s åœ¨æœ¬åœ°DNSæœåŠ¡å™¨ä¸èƒ½è§£æï¼Œå°†å‘é€è‡³å¤–éƒ¨DNS\n",
+			printf(" url: %s ÔÚ±¾µØDNS·şÎñÆ÷²»ÄÜ½âÎö£¬½«·¢ËÍÖÁÍâ²¿DNS\n",
 			       url);
 			unsigned short pid;
 			memcpy(&pid, buf, sizeof(unsigned short));
@@ -168,7 +168,7 @@ void receiveFromLocal()
 						    (struct sockaddr *)&extern_name,
 						    sizeof extern_name);
 				if (level > 0) {
-					printf(" å‘å¤–éƒ¨DNSå‘é€è¯·æ±‚.  url: %s\n",
+					printf(" ÏòÍâ²¿DNS·¢ËÍÇëÇó.  url: %s\n",
 					       url);
 				}
 			}
@@ -192,7 +192,7 @@ void receiveFromExtern()
 	if (datalength > -1) {
 		printf("\n receive form extern server successfully!\n\n");
 		if (level > 0) {
-			printf(" å¤–éƒ¨DNSæœåŠ¡å™¨IPï¼š%s\n",
+			printf(" Íâ²¿DNS·şÎñÆ÷IP£º%s\n",
 			       inet_ntoa(extern_dns.sin_addr));
 
 			PrintTime();
@@ -212,7 +212,7 @@ void receiveFromExtern()
 		if(trans_count > 0)
 			trans_count--;
 		if (level > 1) {
-			printf(" è½¬æ¢è¡¨é¡¹æ•°:%d \n", trans_count);
+			printf(" ×ª»»±íÏîÊı:%d \n", trans_count);
 		}
 		trans_table[indexInTable].done = true;
 		DNIPList *newNode = (DNIPList*)malloc(sizeof(DNIPList));

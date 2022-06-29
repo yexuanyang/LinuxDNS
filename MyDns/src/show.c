@@ -17,7 +17,7 @@ void PrintTime()
 	#endif
 	strftime(curTime, sizeof(curTime), "%c",
 		 time);
-	printf("æ—¶é—´ï¼š%s\n", curTime);
+	printf("Ê±¼ä£º%s\n", curTime);
 	return;
 }
 
@@ -26,7 +26,7 @@ void PrintAnswer(DNS_PACKET packet,char *buf)
 	
 	for (unsigned j = 0; j < packet.header.ancount; j++) {
 		unsigned short offset = ( ((unsigned short)packet.AN[j].name[0]) << 8 | (unsigned char)packet.AN[j].name[1] ) & 0x3fff;
-		printf("<==========å›ç­”åŒºæ®µ==========>\n\n");
+		printf("<==========»Ø´ğÇø¶Î==========>\n\n");
 		char url[DNameMaxLen];
 		Get_TLD(buf, url,offset);
 		printf("Name: %s \t", url);
@@ -57,7 +57,7 @@ void PrintAnswer(DNS_PACKET packet,char *buf)
 		
 		
 		for (unsigned i = 0; i < packet.header.nscount; i++) {
-			printf("<==========æˆæƒåŒºæ®µ==========>\n\n");
+			printf("<==========ÊÚÈ¨Çø¶Î==========>\n\n");
 			printf("Name: %s \t", packet.NS[i].name);
 			PrintTime();
 			printf("Type: %u \tClass: %u\t TTL: %u\t DataLen: %u\n",
@@ -67,7 +67,7 @@ void PrintAnswer(DNS_PACKET packet,char *buf)
 		
 		
 		for (unsigned i = 0; i < packet.header.arcount; i++) {
-			printf("<==========é¢å¤–èµ„æºåŒºæ®µ==========>\n\n");
+			printf("<==========¶îÍâ×ÊÔ´Çø¶Î==========>\n\n");
 			printf("Name: %s \t", packet.AR[i].name);
 			PrintTime();
 			printf("Type: %u \tClass: %u\t TTL: %u\t DataLen: %u\n",
@@ -82,7 +82,7 @@ void Show_DNSPacket(DNS_PACKET packet,char *buf)
 {
 	if (level == 2) {
 		printf("\n ID: %u \n QR: %x \n OPCODE: %x \n AA: %x \n TC: %x \n RD: %x \n RA: %x \n zero: %x \n rcode: %x \n\
- é—®é¢˜æ•°: %u \n èµ„æºè®°å½•æ•°: %u \n æˆæƒèµ„æºè®°å½•æ•°: %u \n é¢å¤–èµ„æºè®°å½•æ•°: %u \n",
+ ÎÊÌâÊı: %u \n ×ÊÔ´¼ÇÂ¼Êı: %u \n ÊÚÈ¨×ÊÔ´¼ÇÂ¼Êı: %u \n ¶îÍâ×ÊÔ´¼ÇÂ¼Êı: %u \n",
 		       packet.header.id, packet.header.qr, packet.header.opcode,
 		       packet.header.aa, packet.header.tc, packet.header.rd,
 		       packet.header.ra, packet.header.z, packet.header.rcode,
