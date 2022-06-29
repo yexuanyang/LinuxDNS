@@ -42,7 +42,7 @@ char *Ip_str(DNIPList **Local_DNIPList, DNIPList **Temp_DNIPList, char *url)
 	time_t now;
 	time(&now);
 	if (!ip_str) {
-		printf(" \n\n鐢宠鍐呭瓨澶辫触\n");
+		printf(" \n\n申请内存失败\n");
 		exit(1);
 	}
 	char *destName = url;
@@ -61,7 +61,7 @@ char *Ip_str(DNIPList **Local_DNIPList, DNIPList **Temp_DNIPList, char *url)
 				memcpy(ip_str,cur_Pair_In_Local_List->ip,sizeof cur_Pair_In_Local_List->ip);
 			#endif
 			if (level > 0) {
-				printf("浠庢湰鍦板鐓ц〃鑾峰彇IP鎴愬姛\n");
+				printf("从本地对照表获取IP成功\n");
 			}
 			return ip_str;
 
@@ -75,7 +75,7 @@ char *Ip_str(DNIPList **Local_DNIPList, DNIPList **Temp_DNIPList, char *url)
 				memcpy(ip_str,cur_Pair_In_Temp_List->ip,sizeof cur_Pair_In_Temp_List->ip);
 			#endif
 			if (level > 0) {
-				printf("浠庣綉缁滅紦瀛樿〃鑾峰彇IP鎴愬姛\n");
+				printf("从网络缓存表获取IP成功\n");
 			}
 			LRU(Temp_DNIPList, cur_Pair_In_Temp_List,
 			    cur_Pair_In_Temp_List_ahead);
