@@ -159,7 +159,7 @@ void receiveFromLocal()
 			pid = ntohs(pid);
 
 			unsigned short nid =
-				generate_new_id(pid, client, 10, url);
+				generate_new_id(pid, client, 30, url);
 			nid = htons(nid);
 			if (nid == (unsigned short)-1 && level > 0) {
 				printf(" buffer full\t nid:%x\n",nid);
