@@ -17,7 +17,6 @@ char fileName[129] = "dest.txt";
 char DNSServerIp[17] = "192.168.1.1";
 DNIPList **local_dniplist = NULL,
 	**extern_dniplist = NULL;
-
 void getLevel(int argc, char *argv[])
 {
 	bool setDNS = false, setFile = false;
@@ -66,7 +65,7 @@ void addToExternDniplist(DNIPList **extern_dniplist, DNIPList *newNode)
 
 void receiveFromLocal()
 {
-	char buf[BUFSIZE];
+	char buf[BUFSIZE],url[DNameMaxLen];
 	memset(buf, 0, BUFSIZE);
 	int dataLength = -1;
 	dataLength = recvfrom(inDNS, buf, BUFSIZE, 0, (struct sockaddr *)&client,
@@ -74,7 +73,7 @@ void receiveFromLocal()
 	if (dataLength > -1) {
 		printf("\n receive successfully!\n\n");
 		DNS_PACKET packet = receiveDNS(buf);
-		char url[DNameMaxLen];
+		
 		Get_TLD(buf, url,12);
 		if (level > 0) {
 			PrintTime();
@@ -95,12 +94,12 @@ void receiveFromLocal()
 				PrintTime();
 				printf("url:%s -> IP: %s\n", url, ip);
 			}
-			char sendBuf[BUFSIZE];
-			memcpy(sendBuf, buf, dataLength);
+			char sendBuf[BUFSIZE];// answer message
+			memcpy(sendBuf, buf, dataLength);// copy the head
 			unsigned short _16bitflag = htons(0x8180);
 			unsigned short _16bitANcount;
 			memcpy(sendBuf+2, &_16bitflag,
-				sizeof(unsigned short));
+				sizeof(unsigned short));//change the flag
 
 			if (strcmp(ip, "0.0.0.0") == 0) {
 				_16bitANcount = htons(0x0000);
@@ -108,11 +107,11 @@ void receiveFromLocal()
 				_16bitANcount = htons(0x0001);
 			}
 			memcpy(sendBuf+ 6, &_16bitANcount,
-				sizeof(unsigned short));
+				sizeof(unsigned short));//change the ANcount
 
 			int curlen = 0;
-			char answer[16];
-			unsigned short Name = htons(0xc00c);
+			char answer[16];// resource record
+			unsigned short Name = htons(0xc00c);// compressed 
 			unsigned short TypeA = htons(0x0001);
 			unsigned short ClassA = htons(0x0001);
 			unsigned long TTL = htons(0x78); // 120s
@@ -157,7 +156,7 @@ void receiveFromLocal()
 			pid = ntohs(pid);
 
 			unsigned short nid =
-				generate_new_id(pid, client, 30, url);
+				generate_new_id(pid, client, DefaultExpireTime, url);
 			nid = htons(nid);
 			if (nid == (unsigned short)-1 && level > 0) {
 				printf(" buffer full\t nid:%x\n",nid);
@@ -171,7 +170,10 @@ void receiveFromLocal()
 					printf(" 向外部DNS发送请求.  url: %s\n",
 						url);
 				}
+				
 			}
+			
+			
 		}
 		free(packet.AN);
 		free(packet.AR);

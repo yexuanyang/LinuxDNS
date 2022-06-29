@@ -59,6 +59,8 @@
 #define ID_TRANS_SIZE 32 /* The max size of ID_TRANS_TABLE*/
 #define DNS_PORT 53 //server's port
 #define DNameMaxLen 129 //name's max length
+#define DefaultExpireTime 10 // 30 second
+
 
 //macro defination
 #define BUFSIZE 1024 //dns message's max byte size
