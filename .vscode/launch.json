@@ -4,16 +4,17 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        
         {
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/MyDns/build/bin/MyDns",
-            "args": [],
+            "args": ["-D 192.168.168.2"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
-            "externalConsole": false,
+            "externalConsole": true,
             "MIMode": "gdb",
             "setupCommands": [
                 {
@@ -27,6 +28,7 @@
                     "ignoreFailures": true
                 }
             ]
+            
         }
         
     ]

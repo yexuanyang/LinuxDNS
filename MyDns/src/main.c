@@ -16,7 +16,7 @@ struct sockaddr_in client, extern_dns;
 char fileName[129] = "dest.txt";
 char DNSServerIp[17] = "192.168.1.1";
 DNIPList **local_dniplist = NULL,
-	 **extern_dniplist = NULL;
+	**extern_dniplist = NULL;
 
 void getLevel(int argc, char *argv[])
 {
@@ -46,7 +46,7 @@ void getLevel(int argc, char *argv[])
 
 void showBuffer(char *buf, int length)
 {
-	printf(" 获取到的包数据长度：%d\n获取的包数据：\n ", length);
+	printf(" 获取到的包数据长度：%d\n获取的包数据:\n ", length);
 	for (int i = 0; i < length; i++) {
 		printf("%02x ", (unsigned char)buf[i]);
 		if ((i + 1) % 40 == 0) {
@@ -70,7 +70,7 @@ void receiveFromLocal()
 	memset(buf, 0, BUFSIZE);
 	int dataLength = -1;
 	dataLength = recvfrom(inDNS, buf, BUFSIZE, 0, (struct sockaddr *)&client,
-			      &length_client);
+				&length_client);
 	if (dataLength > -1) {
 		printf("\n receive successfully!\n\n");
 		DNS_PACKET packet = receiveDNS(buf);
@@ -79,8 +79,8 @@ void receiveFromLocal()
 		if (level > 0) {
 			PrintTime();
 			
-			printf(" 客户端IP：  %s:%u\n",
-			       inet_ntoa(client.sin_addr), client.sin_port);
+			printf(" 客户端IP:  %s:%u\n",
+				inet_ntoa(client.sin_addr), client.sin_port);
 				
 			printf(" 询问的域名: %s\n", url);
 			if (level > 1) {
@@ -100,7 +100,7 @@ void receiveFromLocal()
 			unsigned short _16bitflag = htons(0x8180);
 			unsigned short _16bitANcount;
 			memcpy(sendBuf+2, &_16bitflag,
-			       sizeof(unsigned short));
+				sizeof(unsigned short));
 
 			if (strcmp(ip, "0.0.0.0") == 0) {
 				_16bitANcount = htons(0x0000);
@@ -108,7 +108,7 @@ void receiveFromLocal()
 				_16bitANcount = htons(0x0001);
 			}
 			memcpy(sendBuf+ 6, &_16bitANcount,
-			       sizeof(unsigned short));
+				sizeof(unsigned short));
 
 			int curlen = 0;
 			char answer[16];
@@ -123,22 +123,22 @@ void receiveFromLocal()
 			memcpy(answer + curlen, &TypeA, sizeof(unsigned short));
 			curlen += sizeof(unsigned short);
 			memcpy(answer + curlen, &ClassA,
-			       sizeof(unsigned short));
+				sizeof(unsigned short));
 			curlen += sizeof(unsigned short);
 			memcpy(answer + curlen, &TTL, sizeof(unsigned long));
 			curlen += sizeof(unsigned long);
 			memcpy(answer + curlen, &Datalen,
-			       sizeof(unsigned short));
+				sizeof(unsigned short));
 			curlen += sizeof(unsigned short);
 			memcpy(answer + curlen, &IPAddress,
-			       sizeof(unsigned long));
+				sizeof(unsigned long));
 			curlen += sizeof(unsigned long);
 
 			memcpy(&sendBuf[12], answer, sizeof answer);
 
 			dataLength = sendto(inDNS, sendBuf, curlen + dataLength,
-					    0, (struct sockaddr *)&client,
-					    length_client);
+						0, (struct sockaddr *)&client,
+						length_client);
 
 			if (dataLength < 0) {
 				printf(" 发送包失败\n");
@@ -146,12 +146,12 @@ void receiveFromLocal()
 
 			if (level > 0) {
 				printf(" 发送回应包： url:%s -> ip:%s\n", url,
-				       ip);
+					ip);
 			}
 
 		} else { // send to outer DNS
-			printf(" url: %s 在本地DNS服务器不能解析，将发送至外部DNS\n",
-			       url);
+			printf(" url: %s 在本地DNS服务器不能解析,将发送至外部DNS\n",
+				url);
 			unsigned short pid;
 			memcpy(&pid, buf, sizeof(unsigned short));
 			pid = ntohs(pid);
@@ -165,11 +165,11 @@ void receiveFromLocal()
 			} else {
 				memcpy(buf, &nid, sizeof(nid));
 				dataLength = sendto(outDNS, buf, dataLength, 0,
-						    (struct sockaddr *)&extern_name,
-						    sizeof extern_name);
+							(struct sockaddr *)&extern_name,
+							sizeof extern_name);
 				if (level > 0) {
 					printf(" 向外部DNS发送请求.  url: %s\n",
-					       url);
+						url);
 				}
 			}
 		}
@@ -187,13 +187,13 @@ void receiveFromExtern()
 	memset(buf, 0, BUFSIZE);
 	int datalength = -1;
 	datalength = recvfrom(outDNS, buf, BUFSIZE, 0, (struct sockaddr *)&extern_dns,
-			      &length_client);
+				&length_client);
 
 	if (datalength > -1) {
 		printf("\n receive form extern server successfully!\n\n");
 		if (level > 0) {
-			printf(" 外部DNS服务器IP：%s\n",
-			       inet_ntoa(extern_dns.sin_addr));
+			printf(" 外部DNS服务器IP:%s\n",
+				inet_ntoa(extern_dns.sin_addr));
 
 			PrintTime();
 			if (level > 1) {
@@ -222,7 +222,7 @@ void receiveFromExtern()
 			char name[DNameMaxLen];
 			unsigned short offset =
 				(((unsigned short)packet.AN->name[0]) << 8 |
-				 packet.AN->name[1]) &
+				packet.AN->name[1]) &
 				0x3fff;
 			Get_TLD(buf , name,offset);
 			memcpy(newNode->dn, name, sizeof(newNode->dn));
@@ -232,14 +232,14 @@ void receiveFromExtern()
 			struct in_addr ip_addr;
 			#if _WIN64
 			ip_addr.S_un.S_addr = (unsigned)packet.AN->Rdata[0] << 24 |
-				      (unsigned)packet.AN->Rdata[1] << 16 & 0x00ff0000|
-				      (unsigned)packet.AN->Rdata[2] << 8 & 0x0000ff00|
-				      (unsigned)packet.AN->Rdata[3] & 0x000000ff;// get the IP address 
+					(unsigned)packet.AN->Rdata[1] << 16 & 0x00ff0000|
+					(unsigned)packet.AN->Rdata[2] << 8 & 0x0000ff00|
+					(unsigned)packet.AN->Rdata[3] & 0x000000ff;// get the IP address 
 			#elif __linux__
 			ip_addr.s_addr = (unsigned)packet.AN->Rdata[0] << 24 |
-				      (unsigned)packet.AN->Rdata[1] << 16 & 0x00ff0000|
-				      (unsigned)packet.AN->Rdata[2] << 8 & 0x0000ff00|
-				      (unsigned)packet.AN->Rdata[3] & 0x000000ff;
+					(unsigned)packet.AN->Rdata[1] << 16 & 0x00ff0000|
+					(unsigned)packet.AN->Rdata[2] << 8 & 0x0000ff00|
+					(unsigned)packet.AN->Rdata[3] & 0x000000ff;
 			#endif
 			memcpy(newNode->ip, inet_ntoa(ip_addr),sizeof(newNode->ip));
 			newNode->nextPtr = NULL;
@@ -247,7 +247,7 @@ void receiveFromExtern()
 		}
 		client = trans_table[indexInTable].client;
 		datalength = sendto(inDNS, buf, datalength, 0,
-				    (struct sockaddr *)&client, length_client);
+					(struct sockaddr *)&client, length_client);
 		free(packet.AN);
 		free(packet.AR);
 		free(packet.NS);
@@ -284,7 +284,7 @@ int main(int argc, char *argv[])
 	if(outDNS < 0){
 		#if _WIN64
 		printf("create outDNS socket failed! error code:%d",
-		       WSAGetLastError());
+			WSAGetLastError());
 		#elif __linux__
 		printf("create outDNS socket failed! error information:%s\n",
 				strerror(errno));
@@ -343,7 +343,7 @@ int main(int argc, char *argv[])
 		#if _WIN64
 		if (in)
 			printf("ERROR! INDNS BIND FAILED! error code:%d\n",
-			       WSAGetLastError());
+				WSAGetLastError());
 		#elif __linux__
 		if(in)
 			printf("ERROR! INDNS BIND FAILED! error information:%s\n",strerror(errno) );
@@ -355,7 +355,7 @@ int main(int argc, char *argv[])
 
 	while (1) {
 		receiveFromLocal();
- 		receiveFromExtern();
+		receiveFromExtern();
 		DNIPList *prinTemp = NULL;
 	}
 
