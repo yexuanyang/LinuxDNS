@@ -94,8 +94,10 @@ void receiveFromLocal()
 				PrintTime();
 				printf("url:%s -> IP: %s\n", url, ip);
 			}
-			char sendBuf[BUFSIZE];// answer message
-			memcpy(sendBuf, buf, dataLength);// copy the head
+			char sendBuf[BUFSIZE];
+			memcpy(sendBuf, buf, dataLength);
+			int questionLen = Get_TLDLength(buf + 0xc);
+
 			unsigned short _16bitflag = htons(0x8180);
 			unsigned short _16bitANcount;
 			memcpy(sendBuf+2, &_16bitflag,
@@ -133,7 +135,7 @@ void receiveFromLocal()
 				sizeof(unsigned long));
 			curlen += sizeof(unsigned long);
 
-			memcpy(&sendBuf[12], answer, sizeof answer);
+			memcpy(&sendBuf[12 + questionLen + 4], answer, sizeof answer);
 
 			dataLength = sendto(inDNS, sendBuf, curlen + dataLength,
 						0, (struct sockaddr *)&client,
