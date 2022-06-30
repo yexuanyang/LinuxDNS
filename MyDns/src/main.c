@@ -240,10 +240,10 @@ void receiveFromExtern()
 					(unsigned)packet.AN->Rdata[2] << 8 & 0x0000ff00|
 					(unsigned)packet.AN->Rdata[3] & 0x000000ff;// get the IP address 
 			#elif __linux__
-			ip_addr.s_addr = (unsigned)packet.AN->Rdata[0] << 24 |
-					(unsigned)packet.AN->Rdata[1] << 16 & 0x00ff0000|
-					(unsigned)packet.AN->Rdata[2] << 8 & 0x0000ff00|
-					(unsigned)packet.AN->Rdata[3] & 0x000000ff;
+			ip_addr.s_addr = (unsigned)packet.AN->Rdata[3] << 24 |
+					(unsigned)packet.AN->Rdata[2] << 16 & 0x00ff0000|
+					(unsigned)packet.AN->Rdata[1] << 8 & 0x0000ff00|
+					(unsigned)packet.AN->Rdata[0] & 0x000000ff;
 			#endif
 			memcpy(newNode->ip, inet_ntoa(ip_addr),sizeof(newNode->ip));
 			newNode->nextPtr = NULL;

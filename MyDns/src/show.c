@@ -58,7 +58,10 @@ void PrintAnswer(DNS_PACKET packet,char *buf)
 		
 		for (unsigned i = 0; i < packet.header.nscount; i++) {
 			printf("<==========授权区段==========>\n\n");
-			printf("Name: %s \t", packet.NS[i].name);
+			unsigned short offset = ( ((unsigned short)packet.NS[i].name[0]) << 8 | (unsigned char)packet.NS[i].name[1] ) & 0x3fff;
+			char url[DNameMaxLen];
+			Get_TLD(buf,url,offset);
+			printf("Name: %s \t", url);
 			PrintTime();
 			printf("Type: %u \tClass: %u\t TTL: %u\t DataLen: %u\n",
 			       packet.NS[i].RRtype, packet.NS[i].RRclass,
@@ -68,7 +71,10 @@ void PrintAnswer(DNS_PACKET packet,char *buf)
 		
 		for (unsigned i = 0; i < packet.header.arcount; i++) {
 			printf("<==========额外资源区段==========>\n\n");
-			printf("Name: %s \t", packet.AR[i].name);
+			unsigned short offset = ( ((unsigned short)packet.AR[i].name[0]) << 8 | (unsigned char)packet.AR[i].name[1] ) & 0x3fff;
+			char url[DNameMaxLen];
+			Get_TLD(buf,url,offset);
+			printf("Name: %s \t", url);
 			PrintTime();
 			printf("Type: %u \tClass: %u\t TTL: %u\t DataLen: %u\n",
 			       packet.AR[i].RRtype, packet.AR[i].RRclass,

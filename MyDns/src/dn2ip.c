@@ -5,7 +5,14 @@ extern int level;
 void LRU(DNIPList** head, DNIPList* destNode,DNIPList* destNodeAhead) {
 	time_t now;
 	time(&now);
+	if (destNode != (*head)->nextPtr) {//LRU destnode
+		DNIPList *curHead = (*head)->nextPtr;
+		destNodeAhead->nextPtr = destNode->nextPtr;
+		destNode->nextPtr = curHead;
+		(*head)->nextPtr = destNode;
+	}
 	for (DNIPList *current = (*head)->nextPtr, *last = (*head); current; ) {//current is the first node , not the head
+	// delete the expired node
 		if (current->expire_time < now) {
 			last->nextPtr = current->nextPtr;
 			DNIPList *Temp = current;
@@ -16,12 +23,7 @@ void LRU(DNIPList** head, DNIPList* destNode,DNIPList* destNodeAhead) {
 			current = current->nextPtr;
 		}
 	}
-	if (destNode != (*head)->nextPtr) {
-		DNIPList *curHead = (*head)->nextPtr;
-		destNodeAhead->nextPtr = destNode->nextPtr;
-		destNode->nextPtr = curHead;
-		(*head)->nextPtr = destNode;
-	}
+	
 	DNIPList *prinTemp = NULL;
 	prinTemp = (*head)->nextPtr; // get the first node
 	if (level >= 2) {
@@ -32,8 +34,9 @@ void LRU(DNIPList** head, DNIPList* destNode,DNIPList* destNodeAhead) {
 			       prinTemp->ip);
 			i++;
 		}
+		printf("======================\n");
 	}
-	printf("======================\n");
+	
 }
 
 char *Ip_str(DNIPList **Local_DNIPList, DNIPList **Temp_DNIPList, char *url)
@@ -91,9 +94,9 @@ char *Ip_str(DNIPList **Local_DNIPList, DNIPList **Temp_DNIPList, char *url)
 		}
 	}
 	#if _WIN64
-		strcpy_s(ip_str, 17, "failed");
+		strcpy_s(ip_str, 7, "failed");
 	#elif __linux__
-		memcpy(ip_str,"failed",17);
+		memcpy(ip_str,"failed",7);
 	#endif
 	return ip_str;
 }
