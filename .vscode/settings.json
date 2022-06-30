@@ -1,6 +1,7 @@
 {
     "cmake.sourceDirectory": "${workspaceFolder}/MyDns",
     "files.associations": {
-        "in.h": "c"
+        "in.h": "c",
+        "total.h": "c"
     }
 }

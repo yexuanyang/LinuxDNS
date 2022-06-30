@@ -23,10 +23,14 @@ unsigned short generate_new_id(unsigned short id, struct sockaddr_in cli, int tt
 	} else{//the table is full
 		for (i = 0; i < trans_count; i++) {
 			if (trans_table[i].done ||
-				trans_table[i].expire_time < nowtime) { // already expire or already done , discard it
+				trans_table[i].expire_time < nowtime || ( trans_table[i].last_ID < id && strcmp(url,trans_table[i].url) == 0 )) { // already expire or already done , discard it
+				//find the same url , save that has bigger id
 				if (trans_table[i].expire_time != -1 && trans_table[i].expire_time < nowtime && level>=1) { // debug level >= 1
 					printf("The request packet with URL %s expired and the record has been discarded\n",
 						trans_table[i].url);
+				}
+				if( trans_table[i].last_ID < id && strcmp(url,trans_table[i].url) == 0 ){
+					printf("Find the same url, update the request packet with URL %s\n",trans_table[i].url);
 				}
 				
 				trans_table[i].last_ID = id;
@@ -36,6 +40,7 @@ unsigned short generate_new_id(unsigned short id, struct sockaddr_in cli, int tt
 				memcpy(trans_table[i].url, url, sizeof(trans_table[i].url));
 				return i;// return the index as new ID
 			}
+			
 		}
 	} 
 	return -1;

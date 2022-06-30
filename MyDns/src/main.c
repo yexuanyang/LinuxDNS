@@ -116,9 +116,9 @@ void receiveFromLocal()
 			unsigned short Name = htons(0xc00c);// compressed 
 			unsigned short TypeA = htons(0x0001);
 			unsigned short ClassA = htons(0x0001);
-			unsigned long TTL = htons(0x78); // 120s
+			unsigned  TTL = htons(0x78); // 120s
 			unsigned short Datalen = htons(0x0004);
-			unsigned long IPAddress = inet_addr(ip);
+			unsigned  IPAddress = inet_addr(ip);
 			memcpy(answer + curlen, &Name, sizeof(unsigned short));
 			curlen += sizeof(unsigned short);
 			memcpy(answer + curlen, &TypeA, sizeof(unsigned short));
@@ -126,14 +126,14 @@ void receiveFromLocal()
 			memcpy(answer + curlen, &ClassA,
 				sizeof(unsigned short));
 			curlen += sizeof(unsigned short);
-			memcpy(answer + curlen, &TTL, sizeof(unsigned long));
-			curlen += sizeof(unsigned long);
+			memcpy(answer + curlen, &TTL, sizeof(unsigned));
+			curlen += sizeof(unsigned);
 			memcpy(answer + curlen, &Datalen,
 				sizeof(unsigned short));
 			curlen += sizeof(unsigned short);
 			memcpy(answer + curlen, &IPAddress,
-				sizeof(unsigned long));
-			curlen += sizeof(unsigned long);
+				sizeof(unsigned));
+			curlen += sizeof(unsigned);
 
 			memcpy(&sendBuf[12 + questionLen + 4], answer, sizeof answer);
 
