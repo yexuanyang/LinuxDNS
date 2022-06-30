@@ -1,4 +1,4 @@
-
+﻿
 #include "total.h"
 
 extern int level;
